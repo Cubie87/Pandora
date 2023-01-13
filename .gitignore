@@ -1,4 +1,5 @@
 *.log
 *.env
+*.sh
 *pycache*
 variables.py
