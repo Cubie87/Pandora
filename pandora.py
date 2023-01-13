@@ -254,7 +254,7 @@ async def chat(ctx, *, prompt):
     )
     response_text = response["choices"][0]["text"]
     
-    file = open("gptlog", 'a')
+    file = open("gptlog.log", 'a')
     file.write("Q: " + prompt + "\n")
     file.write("A: " + response_text + "\n\n\n\n\n")
     file.close()
