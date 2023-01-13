@@ -220,16 +220,21 @@ async def stop(ctx):
 
 
 
-
+#"""
 # furry reactions
 @bot.event
 async def on_message(message):
+    if message.author == bot.user:
+        return
+    
     # the furry reacts
-    if message.content.lower().startswith("uwu") or message.content.lower().startswith("owo"):
+    if message.content.lower().startswith(("uwu","owo")):
         await message.channel.send(furryReply)
     elif message.content.startswith(":3"):
         # Black Hanekawa Cat Gif
         await message.channel.send(file = discord.File(media + "teehee0.gif"))
+
+    await bot.process_commands(message)
 
 
 
