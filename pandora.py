@@ -96,6 +96,10 @@ async def ping(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " pinged the bot.")
     await ctx.send(embed = discord.Embed(title = "Pong!", color = 0x0078ff))
 
+# help command
+@bot.command()
+async def help(ctx):
+    await ctx.send(embed = discord.Embed(title = "Pandora's commands", description = "This is the help command!", color = 0x0078ff))
 
 # roll some dice!
 @bot.command(aliases=['r'])
@@ -103,6 +107,7 @@ async def roll(ctx, *, diceString):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
     reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
+
 
 
 
@@ -153,7 +158,7 @@ async def p(ctx, *, link):
 
     # Check for attack/illegal characters in link.
     if re.search("[^a-zA-Z1-9_-]", link) != None or len(link) != 11:
-        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\Eg: `=play dQw4w9WgXcQ`", color = 0x880000))
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
         return
     
     # get the right voice connection
@@ -190,6 +195,7 @@ async def pause(ctx):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Not in a voice channel", color = 0x880000))
         return
     voiceChannel.pause()
+    await ctx.message.add_reaction("👍")
     print("Pausing")
     
 @bot.command()
@@ -201,6 +207,7 @@ async def resume(ctx):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Not in a voice channel", color = 0x880000))
         return
     voiceChannel.resume()
+    await ctx.message.add_reaction("👍")
     print("Resuming Playback")
     
 @bot.command()
@@ -212,6 +219,7 @@ async def stop(ctx):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Not in a voice channel", color = 0x880000))
         return
     voiceChannel.stop()
+    await ctx.message.add_reaction("👍")
     print("Stopping Playback")
 
 
