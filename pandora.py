@@ -128,7 +128,8 @@ async def join(ctx):
         return
     # otherwise, channel is the voice channel that the user is currently connected to.
     await channel.connect()
-    await ctx.send(embed = discord.Embed(title = "Joining...", color = 0x888888))
+    await ctx.message.add_reaction("👍")
+    #await ctx.send(embed = discord.Embed(title = "Joining...", color = 0x888888))
     print("Joining a voice channel!")
 
 
@@ -139,7 +140,7 @@ async def dc(ctx):
     ctx.voice_client.cleanup()
     print("Leaving a voice channel!")
     await ctx.send(embed = discord.Embed(title = "Leaving...", color = 0x888888))
-    #print("No channel to disconnect!")
+    await ctx.message.add_reaction("👍")
     #await ctx.send(embed = discord.Embed(title = "Error!", description = "I'm not in a voice channel here!", color = 0x880000))
 
 
@@ -157,7 +158,7 @@ async def p(ctx, *, link):
         # delete all text after the spacebar
 
     # Check for attack/illegal characters in link.
-    if re.search("[^a-zA-Z1-9_-]", link) != None or len(link) != 11:
+    if not re.search("^[a-zA-Z0-9_-]{11}$", link):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
         return
     
@@ -177,10 +178,12 @@ async def p(ctx, *, link):
             ctx.send(embed = discord.Embed(title = "Error!", description = "Please join a voice channel to play music.", color = 0x880000))
         return
     
+    await ctx.message.add_reaction("👍")
     # the file doesn't exist! Need to download it.
     os.system("yt-dlp -x --audio-format mp3 --audio-quality 0  -o '" + media + link + ".%(ext)s' " + "https://www.youtube.com/watch?v=" + link)
 
     voiceChannel.play(discord.FFmpegPCMAudio(media + link + ".mp3"))
+    await ctx.message.add_reaction("➡")
 
 
 # audio controls
