@@ -72,7 +72,7 @@ bot = commands.Bot(
     strip_after_prefix = True,
     owner_id = botVars.owner,
     intents = intents
-    )
+)
 
 
 
@@ -85,7 +85,7 @@ async def on_ready(): # do this on startup
     # list servers by server name where Pandora exists in on bootup.
     # this is done to prevent unauthorised distribution of the bot into unknown servers.
     async for guild in bot.fetch_guilds(limit=250):
-        print(" - " + guild.name + " - " + str(guild.id) + "\n")
+        print(" - " + guild.name + " - " + str(guild.id))
 
 
 
@@ -99,7 +99,9 @@ async def ping(ctx):
 # help command
 @bot.command()
 async def help(ctx):
-    await ctx.send(embed = discord.Embed(title = "Pandora's commands", description = "This is the help command!", color = 0x0078ff))
+    file = open("help.txt", "r")
+    await ctx.send(embed = discord.Embed(title = "Pandora's commands", description = file.read(), color = 0x0078ff))
+    file.close()
 
 # roll some dice!
 @bot.command(aliases=['r'])
@@ -129,7 +131,6 @@ async def join(ctx):
     # otherwise, channel is the voice channel that the user is currently connected to.
     await channel.connect()
     await ctx.message.add_reaction("👍")
-    #await ctx.send(embed = discord.Embed(title = "Joining...", color = 0x888888))
     print("Joining a voice channel!")
 
 
@@ -139,7 +140,6 @@ async def dc(ctx):
     await ctx.voice_client.disconnect()
     ctx.voice_client.cleanup()
     print("Leaving a voice channel!")
-    await ctx.send(embed = discord.Embed(title = "Leaving...", color = 0x888888))
     await ctx.message.add_reaction("👍")
     #await ctx.send(embed = discord.Embed(title = "Error!", description = "I'm not in a voice channel here!", color = 0x880000))
 
