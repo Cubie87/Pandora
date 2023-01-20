@@ -3,3 +3,4 @@
 *.sh
 *pycache*
 variables.py
+*.mp3

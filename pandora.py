@@ -180,7 +180,7 @@ async def p(ctx, *, link):
     
     await ctx.message.add_reaction("👍")
     # the file doesn't exist! Need to download it.
-    os.system("yt-dlp -x --audio-format mp3 --audio-quality 0  -o '" + media + link + ".%(ext)s' " + "https://www.youtube.com/watch?v=" + link)
+    os.system("yt-dlp -x --audio-format mp3 --audio-quality 0  -o '" + media + link + ".%(ext)s' " + "'https://www.youtube.com/watch?v=" + link + "'")
 
     voiceChannel.play(discord.FFmpegPCMAudio(media + link + ".mp3"))
     await ctx.message.add_reaction("➡")
