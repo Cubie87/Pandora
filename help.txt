@@ -3,5 +3,5 @@
 `roll` (`r`): roll some dice
 `join`: join the voice channel you're currently in
 `leave`: leave the connected voice channel in the server
-`play`: play some music (control with `pause`/`resume`/`stop`)
+`play` (`p`): play some music (control with `pause`/`resume`/`stop`)
 `chat`: chat with the bot
