@@ -235,6 +235,7 @@ async def stop(ctx):
 # furry reactions
 @bot.event
 async def on_message(message):
+    # don't respond to the bot
     if message.author == bot.user:
         return
     
@@ -245,6 +246,7 @@ async def on_message(message):
         # Black Hanekawa Cat Gif
         await message.channel.send(file = discord.File(media + "teehee0.gif"))
 
+    # continue processing bot commands
     await bot.process_commands(message)
 
 
