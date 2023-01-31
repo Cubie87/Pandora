@@ -27,7 +27,7 @@ All audio played is cached in `./media/` as mp3 files and can be deleted occasio
 
 
 ## Setup
-To run your own instance of Pandora, you will need some extra files in the project's root directory.
+To run your own instance of Pandora, you will need some extra files in the project's `src/` directory.
 
 ### Files
 
