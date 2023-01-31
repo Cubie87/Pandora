@@ -12,3 +12,6 @@ RUN pip install python-dotenv
 RUN pip install -U discord.py[voice]
 
 CMD python
+
+
+## this file is not ready for use. Please do not use it.
