@@ -44,7 +44,9 @@ class botVars:
     owner = [numerical Discord ID]
 ```
 
-Then, install dependencies.
+Then, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora.
+
+Alternatively, install dependences 
 
 ### Program Dependencies
 
