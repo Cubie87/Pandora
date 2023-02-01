@@ -65,8 +65,7 @@ $ sudo apt install python-is-python3 python3-pip
 
 Install python dependencies
 ```
-$ pip install discord.py
-$ pip install python-dotenv
+$ pip install discord.py python-dotenv numpy openai
 $ pip install -U discord.py[voice]
 ```
 
