@@ -46,7 +46,7 @@ class botVars:
 
 Then, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora.
 
-Alternatively, install dependences 
+Alternatively, to run without docker, install dependences 
 
 ### Program Dependencies
 
@@ -56,7 +56,7 @@ $ sudo apt install yt-dlp
 $ sudo apt install screen
 ```
 
-### Python Dependencies
+#### Python Dependencies
 
 If you don't have python3 and pip already, install them
 ```

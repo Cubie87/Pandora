@@ -18,7 +18,7 @@ RUN pip install openai
 RUN useradd -ms /bin/bash pandora
 
 # copy code over
-ADD src /home/pandora
+COPY src /home/pandora
 
 
 # default user pandora in home directory
