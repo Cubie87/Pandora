@@ -15,7 +15,9 @@ Use `help` (with prefix) to see commands in Discord.
  - `join`: join the voice channel you're currently in
  - `leave` (or `dc`): leave the connected voice channel in the server
  - `play` (or `p`): play some music (control with `pause`/`resume`/`stop`)
+ - `grab`: grab a youtube video, extract the audio, and reply with the audio file as a `.mp3`
  - `chat`: chat with the bot (OpenAI's chat-davinci-003 model)
+ 
 
 The bot owner is also able to use the following commands:
  - `list`: list all the guilds that the bot is part of
