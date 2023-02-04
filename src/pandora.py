@@ -12,9 +12,6 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import os # reading .env file
 
-# other libraries
-import re # regex
-
 # custom libraries
 from variables import botVars
 import diceRoller 
@@ -164,14 +161,9 @@ async def play(ctx, *, link):
     # ctx.voice_client
     print("Gonna try to play some music")
     print(client.voice_clients)
-    # finds the second spacebar in message
-    a = link.find(" ")
-    if a != -1:
-        link = link[:a]
-        # delete all text after the spacebar
 
-    # Check for attack/illegal characters in link.
-    if not re.search("^[a-zA-Z0-9_-]{11}$", link): # regex expression for a valid youtube video id.
+    
+    if audioTools.checkInvalidLink(link):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
         return
     
@@ -241,6 +233,34 @@ async def stop(ctx):
 
 
 
+# download and send some audio
+@client.command()
+async def grab(ctx, *, link):
+    # check for attack    
+    if audioTools.checkInvalidLink(link):
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
+        return
+    
+    await ctx.message.add_reaction("👍")
+    # if the file does exist, send!
+    if os.path.isfile(media + link + ".mp3"):
+        try:
+            await ctx.send(file=discord.File(media + link + ".mp3"))
+        except:
+            await ctx.send(embed = discord.Embed(title = "Error!", description = "File is too large.", color = 0x880000))
+        else:
+            await ctx.message.add_reaction("➡")
+        return
+
+    # the file doesn't exist! Need to download it.
+    os.system("yt-dlp -x --audio-format mp3 --audio-quality 0  -o '" + media + link + ".%(ext)s' " + "'https://www.youtube.com/watch?v=" + link + "'")
+
+    try:
+        await ctx.send(file=discord.File(media + link + ".mp3"))
+    except:
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "File is too large.", color = 0x880000))
+    else:
+        await ctx.message.add_reaction("➡")
 
 
 
