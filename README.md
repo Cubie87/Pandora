@@ -33,18 +33,19 @@ To run your own instance of Pandora, you will need some extra files in the proje
 
 ### Files
 
-`.env` with
+`src/env` with
 ```
 DISCORD_TOKEN=[Discord token here]
 OPENAI_TOKEN=[OpenAI token here]
 ```
 
-`variables.py` with
+`src/variables.py` with
 ```py
 class botVars:
     prefix = [prefix]
     owner = [numerical Discord ID]
 ```
+The prefix should be a single character used as the prefix for bot commands.
 
 Then, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora.
 
