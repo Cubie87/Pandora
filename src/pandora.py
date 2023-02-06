@@ -312,11 +312,6 @@ async def chat(ctx, *, prompt):
         temperature=0.5,
     )
     response_text = response["choices"][0]["text"]
-    
-    file = open("logs/gptlog.log", 'a')
-    file.write("Q: " + prompt + "\n")
-    file.write("A: " + response_text + "\n\n\n\n\n")
-    file.close()
 
     # Send the generated response back to the channel
     await ctx.send(response_text)
