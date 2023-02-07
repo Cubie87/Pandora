@@ -54,28 +54,28 @@ Alternatively, to run without docker, install dependences
 ### Program Dependencies
 
 Install `yt-dlp` and `screen`
-```
-$ sudo apt install yt-dlp
-$ sudo apt install screen
+```bash
+sudo apt install yt-dlp
+sudo apt install screen
 ```
 
 #### Python Dependencies
 
 If you don't have python3 and pip already, install them
-```
-$ sudo apt install python-is-python3 python3-pip
+```bash
+sudo apt install python-is-python3 python3-pip
 ```
 
 Install python dependencies
-```
-$ pip install discord.py python-dotenv numpy openai
-$ pip install -U discord.py[voice]
+```bash
+pip install discord.py python-dotenv numpy openai
+pip install -U discord.py[voice]
 ```
 
 Then run `run.sh`
-```
-$ chmod +x run.sh
-$ ./run.sh
+```bash
+chmod +x run.sh
+./run.sh
 ```
 
 Generate a discord bot invite URL on the applications page and invite to a server. 
