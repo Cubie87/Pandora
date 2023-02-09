@@ -53,9 +53,8 @@ Alternatively, to run without docker, install dependences
 
 ### Program Dependencies
 
-Install `yt-dlp` and `screen`
+Install `screen`
 ```bash
-sudo apt install yt-dlp
 sudo apt install screen
 ```
 
@@ -68,7 +67,7 @@ sudo apt install python-is-python3 python3-pip
 
 Install python dependencies
 ```bash
-pip install discord.py python-dotenv numpy openai
+pip install discord.py python-dotenv numpy yt-dlp openai
 pip install -U discord.py[voice]
 ```
 
