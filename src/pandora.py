@@ -192,7 +192,7 @@ async def play(ctx, *, link):
         try:
             voiceChannel.play(discord.FFmpegPCMAudio(media + link + ".mp3"))
         except:
-            ctx.send(embed = discord.Embed(title = "Error!", description = "Please join a voice channel to play music.", color = 0x880000))
+            await ctx.send(embed = discord.Embed(title = "Error!", description = "Please join a voice channel to play music.", color = 0x880000))
         return
     
     await ctx.message.add_reaction("👍")
