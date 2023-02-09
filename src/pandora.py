@@ -12,6 +12,9 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import os # reading .env file
 
+# utility libraries
+import yt_dlp
+
 # custom libraries
 from variables import botVars
 import diceRoller 
@@ -51,7 +54,16 @@ media = media[:-1]
 # define the furry reply (to owo and derivatives)
 furryReply = "Hewwo uwu"
 
-
+# yt-dlp options
+ytdlOps = {
+    'format': 'mp3/bestaudio/best',
+    'outtmpl': 'media/%(id)s.%(ext)s',
+    # ℹ️ See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
+    'postprocessors': [{  # Extract audio using ffmpeg
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+    }]
+}
 
 
 # defines permissions
@@ -185,7 +197,8 @@ async def play(ctx, *, link):
     
     await ctx.message.add_reaction("👍")
     # the file doesn't exist! Need to download it.
-    os.system("yt-dlp -x --audio-format mp3 --audio-quality 0  -o '" + media + link + ".%(ext)s' " + "'https://www.youtube.com/watch?v=" + link + "'")
+    with yt_dlp.YoutubeDL(ytdlOps) as ydl:
+        error_code = ydl.download([link])
 
     voiceChannel.play(discord.FFmpegPCMAudio(media + link + ".mp3"))
     await ctx.message.add_reaction("➡")
@@ -253,7 +266,8 @@ async def grab(ctx, *, link):
         return
 
     # the file doesn't exist! Need to download it.
-    os.system("yt-dlp -x --audio-format mp3 --audio-quality 0  -o '" + media + link + ".%(ext)s' " + "'https://www.youtube.com/watch?v=" + link + "'")
+    with yt_dlp.YoutubeDL(ytdlOps) as ydl:
+        error_code = ydl.download([link])
 
     try:
         await ctx.send(file=discord.File(media + link + ".mp3"))
