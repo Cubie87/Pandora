@@ -2,8 +2,7 @@
 FROM ubuntu:jammy
 
 # install os dependencies
-RUN apt-get update
-RUN apt-get install yt-dlp -y
+RUN apt-get update --fix-missing
 RUN apt-get install python-is-python3 python3-pip -y
 # I would add gnu screen to be able to reattach to Pandora's output
 # but docker really does not like it. Blows the build time to >2hr
@@ -11,7 +10,7 @@ RUN apt-get install python-is-python3 python3-pip -y
 
 # install python dependencies
 RUN pip install --upgrade pip
-RUN pip install discord.py python-dotenv numpy
+RUN pip install discord.py python-dotenv numpy yt-dlp
 RUN pip install -U discord.py[voice]
 #openai
 RUN pip install openai
