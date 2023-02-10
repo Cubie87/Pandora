@@ -202,8 +202,8 @@ async def join(ctx):
 
 
 # disconnect from voice in relevant server
-@client.command(aliases=['leave', 'exit', 'quit'])
-async def dc(ctx):
+@client.command(aliases=['dc'])
+async def leave(ctx):
     try:
         await ctx.voice_client.disconnect()
     except: # if we're not voice connected, let them know!
