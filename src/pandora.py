@@ -161,7 +161,7 @@ async def roll(ctx, *, diceString):
     reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
 
-# roll some dice!
+# send some brief details about a CTFtime entry
 @client.command(aliases=['ctf'])
 async def ctftime(ctx, *, code):
     # check for valid ID
@@ -226,6 +226,7 @@ async def on_voice_state_update(member, before, after):
         return 
 
     if len(voice_state.channel.members) == 1:
+        # Exiting if the bot is the only one connected to this voice channel
         await voice_state.disconnect()
 
 
