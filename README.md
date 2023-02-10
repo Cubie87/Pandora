@@ -2,8 +2,11 @@
 A custom discord bot :D
 
  - Originally written to roll dice.
- - Eventually expanded to be able to cache and play youtube audio (using yt-dlp)
- - Added chatGPT interface (chat-davinci-003 model)
+ - Expanded to be able to cache and play YouTube audio (using yt-dlp)
+ - Can grab video's audio for on the go listening (eg, on the bus), allowing for phone to be locked
+    - This bypasses YouTube's paid feature where you can turn your screen off and still listen
+ - Can give brief details on CtfTime event details
+ - Has a ChatGPT interface (chat-davinci-003 model)
 
 
 ## Usage
@@ -24,6 +27,7 @@ The bot owner is also able to use the following commands:
  - `list`: list all the guilds that the bot is part of
  - `bail`: leave a guild
  - `sleep`: shut down the bot
+This allows the bot to be removed from a server without the owner being part of said server.
 
 
 All audio played is cached in `./media/` as mp3 files and can be deleted occasionally.
