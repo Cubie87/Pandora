@@ -21,6 +21,18 @@ def isCtfCodeValid(code):
         return False
     return True
 
+# re-format timestamp
+def ctfDateTime(start, end):
+    # delete everything past the +
+    a = start.find("+")
+    start = start[:a]
+    a = end.find("+")
+    end = end[:a]
+    # convert to unix epoch
+    unixStart = datetime.strptime(start, '%Y-%m-%dT%H:%M:%S').timestamp()
+    unixEnd = datetime.strptime(end, '%Y-%m-%dT%H:%M:%S').timestamp()
+    return "<t:" + str(unixStart).split('.')[0] + ":F>", "<t:" + str(unixEnd).split('.')[0] + ":F>"
+
 # grab the event, convert from text to json, and return with the key details.
 def grabCtfDetails(code):
     # define browser agent
@@ -36,7 +48,9 @@ def grabCtfDetails(code):
         return False, False
     # cast to json
     eventJson = json.loads(resp.read())
+    # format date and time into discord's timestamp
+    start, end = ctfDateTime(str(eventJson['start']), str(eventJson['finish']))
     # built reply
-    reply = "\nStart Time: " + str(eventJson['start']) + "\nEnd Time: " + str(eventJson['finish']) + "\nDuration: " + str(eventJson['duration']) + "\nCTF Time URL: " + str(eventJson['ctftime_url']) + "\nFormat: " + str(eventJson['format'])
+    reply = "\nStart Time: " + start + "\nEnd Time: " + end + "\nDuration: " + str(eventJson['duration']) + "\nCTF Time URL: " + str(eventJson['ctftime_url']) + "\nFormat: " + str(eventJson['format'])
     # send reply
     return str(eventJson['organizers'][0]['name']), reply
