@@ -23,14 +23,9 @@ def isCtfCodeValid(code):
 
 # re-format timestamp
 def ctfDateTime(start, end):
-    # delete everything past the +
-    a = start.find("+")
-    start = start[:a]
-    a = end.find("+")
-    end = end[:a]
     # convert to unix epoch
-    unixStart = datetime.strptime(start, '%Y-%m-%dT%H:%M:%S').timestamp()
-    unixEnd = datetime.strptime(end, '%Y-%m-%dT%H:%M:%S').timestamp()
+    unixStart = datetime.strptime(start, '%Y-%m-%dT%H:%M:%S%z').timestamp()
+    unixEnd = datetime.strptime(end, '%Y-%m-%dT%H:%M:%S%z').timestamp()
     return "<t:" + str(unixStart).split('.')[0] + ":F>", "<t:" + str(unixEnd).split('.')[0] + ":F>"
 
 # grab the event, convert from text to json, and return with the key details.
