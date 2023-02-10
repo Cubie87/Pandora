@@ -5,7 +5,7 @@ A custom discord bot :D
  - Expanded to be able to cache and play YouTube audio (using yt-dlp)
  - Can grab video's audio for on the go listening (eg, on the bus), allowing for phone to be locked
     - This bypasses YouTube's paid feature where you can turn your screen off and still listen
- - Can give brief details on CtfTime event details
+ - Can give brief details on CTFtime event details
  - Has a ChatGPT interface (chat-davinci-003 model)
 
 
@@ -15,7 +15,7 @@ Use `help` (with prefix) to see commands in Discord.
  - `help`: shows this command
  - `ping`: ping the bot
  - `roll` (or `r`): roll some dice
- - `ctftime` (or `ctf`): grab some information about a CTF from ctftime
+ - `ctftime` (or `ctf`): grab some information about a CTF from CTFtime
  - `join`: join the voice channel you're currently in
  - `leave` (or `dc`): leave the connected voice channel in the server
  - `play` (or `p`): play some music (control with `pause`/`resume`/`stop`)
