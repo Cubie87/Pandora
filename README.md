@@ -12,6 +12,7 @@ Use `help` (with prefix) to see commands in Discord.
  - `help`: shows this command
  - `ping`: ping the bot
  - `roll` (or `r`): roll some dice
+ - `ctftime` (or `ctf`): grab some information about a CTF from ctftime
  - `join`: join the voice channel you're currently in
  - `leave` (or `dc`): leave the connected voice channel in the server
  - `play` (or `p`): play some music (control with `pause`/`resume`/`stop`)
