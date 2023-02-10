@@ -54,7 +54,7 @@ media = "media/ "
 media = media[:-1]
 
 # define the furry reply (to owo and derivatives)
-furryReply = "Hewwo uwu"
+furryReply = "Hewwo uwu?"
 
 # yt-dlp options
 ytdlOps = {
@@ -116,7 +116,7 @@ async def on_ready(): # do this on startup
 # any normal text commands. This is run first before any of the @client.commands() commands
 @client.event
 async def on_message(message):
-    # don't respond to the bot
+    # don't respond to self
     if message.author == client.user:
         return
     
