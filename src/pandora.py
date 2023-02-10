@@ -14,11 +14,13 @@ import os # reading .env file
 
 # utility libraries
 import yt_dlp
+import re # regex
 
 # custom libraries
 from variables import botVars
 import diceRoller 
 import audioTools
+import ctfTime
 
 
 
@@ -99,6 +101,46 @@ async def on_ready(): # do this on startup
 
 
 
+
+
+
+#
+#
+# Run commands
+#
+#
+
+
+
+
+# any normal text commands. This is run first before any of the @client.commands() commands
+@client.event
+async def on_message(message):
+    # don't respond to the bot
+    if message.author == client.user:
+        return
+    
+    # don't respond to DMs
+    if isinstance(message.channel, discord.channel.DMChannel):
+        return
+    
+    # furry reply
+    if message.content.lower().startswith(("uwu","owo")):
+        await message.channel.send(furryReply)
+        return
+    
+    # furry react
+    if message.content.startswith(":3"):
+        # Black Hanekawa Cat Gif
+        await message.channel.send(file = discord.File(media + "teehee0.gif"))
+        return
+
+    # continue processing bot commands
+    await client.process_commands(message)
+
+
+
+
 # ping the bot! The most basic command.
 @client.command()
 async def ping(ctx):
@@ -118,6 +160,22 @@ async def roll(ctx, *, diceString):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
     reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
+
+# roll some dice!
+@client.command(aliases=['ctf'])
+async def ctftime(ctx, *, code):
+    # check for valid ID
+    if not ctfTime.isCtfCodeValid(code):
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
+        return
+    
+    # grab the event details
+    title, reply = ctfTime.grabCtfDetails(code)
+    # errors if the event ID doesn't correspond with an actual ctftime event
+    if not title:
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
+        return
+    await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
 
 
 
@@ -278,30 +336,10 @@ async def grab(ctx, *, link):
 
 
 
-# any normal text commands. This is run first before any of the @client.commands() commands
-@client.event
-async def on_message(message):
-    # don't respond to the bot
-    if message.author == client.user:
-        return
-    
-    # don't respond to DMs
-    if isinstance(message.channel, discord.channel.DMChannel):
-        return
-    
-    # furry reply
-    if message.content.lower().startswith(("uwu","owo")):
-        await message.channel.send(furryReply)
-        return
-    
-    # furry react
-    if message.content.startswith(":3"):
-        # Black Hanekawa Cat Gif
-        await message.channel.send(file = discord.File(media + "teehee0.gif"))
-        return
 
-    # continue processing bot commands
-    await client.process_commands(message)
+
+
+
 
 
 
