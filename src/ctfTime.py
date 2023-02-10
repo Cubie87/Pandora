@@ -15,19 +15,23 @@ import urllib.request
 import re # regex
 from datetime import datetime
 
+# build the reply card.
+def buildReply(eventJson):
+    # convert the timestamps provided into Unix epoch for discord formatting.
+    unixStart = datetime.strptime(str(eventJson['start']), '%Y-%m-%dT%H:%M:%S%z').timestamp()
+    unixEnd = datetime.strptime(str(eventJson['finish']), '%Y-%m-%dT%H:%M:%S%z').timestamp()
+    # note the disccord formatting used for the timestamps.
+    # the split function it to remove all trailing decimals
+    reply = "Organised by: **" + str(eventJson['organizers'][0]['name']) + "**\nStart Time: <t:" + str(unixStart).split('.')[0] + ":F>\nEnd Time: <t:" + str(unixEnd).split('.')[0] + ":F>\nDuration: " + str(eventJson['duration']['days']) + " Days, " + str(eventJson['duration']['hours']) + " Hours" + "\nCTF Time URL: " + str(eventJson['ctftime_url']) + "\nFormat: " + str(eventJson['format'])
+    return reply
+
+
 # check if it's a 4 digit numerical code
 def isCtfCodeValid(code):
     if not re.search("\d{1,4}", code):
         return False
     return True
 
-# re-format timestamp
-def ctfDateTime(start, end):
-    # convert to unix epoch
-    unixStart = datetime.strptime(start, '%Y-%m-%dT%H:%M:%S%z').timestamp()
-    unixEnd = datetime.strptime(end, '%Y-%m-%dT%H:%M:%S%z').timestamp()
-    # return formatted to Discord's unique timestamp format. This allows Discord to handle the offset to client timezones.
-    return "<t:" + str(unixStart).split('.')[0] + ":F>", "<t:" + str(unixEnd).split('.')[0] + ":F>"
 
 # grab the event, convert from text to json, and return with the key details.
 def grabCtfDetails(code):
@@ -44,9 +48,7 @@ def grabCtfDetails(code):
         return False, False
     # cast to json
     eventJson = json.loads(resp.read())
-    # format date and time into discord's timestamp
-    start, end = ctfDateTime(str(eventJson['start']), str(eventJson['finish']))
     # built reply
-    reply = "Organised by: **" + str(eventJson['organizers'][0]['name']) + "**\nStart Time: " + start + "\nEnd Time: " + end + "\nDuration: " + str(eventJson['duration']['days']) + " Days, " + str(eventJson['duration']['hours']) + " Hours" + "\nCTF Time URL: " + str(eventJson['ctftime_url']) + "\nFormat: " + str(eventJson['format'])
+    reply = buildReply(eventJson)
     # send reply
     return str(eventJson['title']), reply
