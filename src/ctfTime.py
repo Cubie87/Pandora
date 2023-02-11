@@ -12,11 +12,12 @@
 
 import json
 import urllib.request
+import feedparser
 import re # regex
 from datetime import datetime
 
-# build the reply card.
-def buildReply(eventJson):
+# build the reply card from json format.
+def buildReplyJson(eventJson):
     # convert the timestamps provided into Unix epoch for discord formatting.
     unixStart = datetime.strptime(str(eventJson['start']), '%Y-%m-%dT%H:%M:%S%z').timestamp()
     unixEnd = datetime.strptime(str(eventJson['finish']), '%Y-%m-%dT%H:%M:%S%z').timestamp()
@@ -24,6 +25,21 @@ def buildReply(eventJson):
     # the split function it to remove all trailing decimals
     reply = "Organised by: **" + str(eventJson['organizers'][0]['name']) + "**\nStart Time: <t:" + str(unixStart).split('.')[0] + ":F>\nEnd Time: <t:" + str(unixEnd).split('.')[0] + ":F>\nDuration: " + str(eventJson['duration']['days']) + " Days, " + str(eventJson['duration']['hours']) + " Hours" + "\nCTF Time URL: " + str(eventJson['ctftime_url']) + "\nFormat: " + str(eventJson['format'])
     return reply
+
+
+# build the reply card from json format.
+def buildReplyRSS(rssFeed):
+    # convert the timestamps provided into Unix epoch for discord formatting.
+    unixStart = datetime.strptime(str(rssFeed['start_date']) + "+0000", '%Y%m%dT%H%M%S%z').timestamp() #20230114T000000
+    unixEnd = datetime.strptime(str(rssFeed['finish_date']) + "+0000", '%Y%m%dT%H%M%S%z').timestamp()
+    # convert organisers to json
+    organisers = json.loads(rssFeed['organizers'])
+
+
+    # note the disccord formatting used for the timestamps.
+    # the split function it to remove all trailing decimals
+    reply = "Organised by: **" + str(organisers[0]['name']) + "**\nStart Time: <t:" + str(unixStart).split('.')[0] + ":F>\nEnd Time: <t:" + str(unixEnd).split('.')[0] + ":F>\nCTF Time URL: " + str(rssFeed['link']) + "\nFormat: " + str(rssFeed['format_text'])
+    return rssFeed['title'], reply
 
 
 # check if it's a 4 digit numerical code
@@ -49,6 +65,14 @@ def grabCtfDetails(code):
     # cast to json
     eventJson = json.loads(resp.read())
     # built reply
-    reply = buildReply(eventJson)
+    reply = buildReplyJson(eventJson)
     # send reply
     return str(eventJson['title']), reply
+
+
+
+
+# grab all current ongoing CTFs
+def currentCTFs():
+    # grab RSS feed
+    return feedparser.parse("https://ctftime.org/event/list/running/rss/")

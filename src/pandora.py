@@ -161,6 +161,12 @@ async def roll(ctx, *, diceString):
     reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
 
+
+#
+# CTFtime commands
+#
+
+
 # send some brief details about a CTFtime entry
 @client.command(aliases=['ctf'])
 async def ctftime(ctx, *, code):
@@ -176,6 +182,15 @@ async def ctftime(ctx, *, code):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
         return
     await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
+
+# send some brief details about a CTFtime entry
+@client.command()
+async def ctfnow(ctx):
+    # grab from RSS feed
+    rssFeed = ctfTime.currentCTFs()
+    for entry in rssFeed['entries']:
+        title, reply = ctfTime.buildReplyRSS(entry)
+        await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
 
 
 
