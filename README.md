@@ -27,7 +27,8 @@ The bot owner is also able to use the following commands:
  - `list`: list all the guilds that the bot is part of
  - `bail`: leave a guild
  - `sleep`: shut down the bot
-This allows the bot to be removed from a server without the owner being part of said server.
+
+Bail allows the bot to be removed from a server without the owner being part of said server.
 
 
 All audio played is cached in `./media/` as mp3 files and can be deleted occasionally.
