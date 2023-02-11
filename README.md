@@ -41,7 +41,6 @@ To run your own instance of Pandora, you will need some extra files in the proje
 `src/env` with
 ```
 DISCORD_TOKEN=[Discord token here]
-OPENAI_TOKEN=[OpenAI token here]
 ```
 
 `src/variables.py` with
