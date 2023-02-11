@@ -12,7 +12,6 @@ RUN apt-get install python-is-python3 python3-pip -y
 RUN pip install --upgrade pip
 RUN pip install discord.py python-dotenv numpy yt-dlp
 RUN pip install -U discord.py[voice]
-RUN pip install feedparser
 #openai
 RUN pip install openai
 

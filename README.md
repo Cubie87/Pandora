@@ -15,7 +15,6 @@ Use `help` (with prefix) to see commands in Discord.
  - `help`: shows this command
  - `ping`: ping the bot
  - `roll` (or `r`): roll some dice
- - `ctftime` (or `ctf`): grab some information about a CTF from CTFtime
  - `join`: join the voice channel you're currently in
  - `leave` (or `dc`): leave the connected voice channel in the server
  - `play` (or `p`): play some music (control with `pause`/`resume`/`stop`)
@@ -72,7 +71,7 @@ sudo apt install python-is-python3 python3-pip
 
 Install python dependencies
 ```bash
-pip install discord.py python-dotenv numpy yt-dlp openai feedparser
+pip install discord.py python-dotenv numpy yt-dlp openai
 pip install -U discord.py[voice]
 ```
 

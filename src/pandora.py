@@ -23,6 +23,8 @@ import audioTools
 import ctfTime
 
 
+# chatbot fun things
+import openai
 
 
 
@@ -35,8 +37,6 @@ import ctfTime
 
 
 
-# chatbot fun things
-import openai
 
 # load token from env file
 load_dotenv(".env")
@@ -160,39 +160,6 @@ async def roll(ctx, *, diceString):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
     reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
-
-
-#
-# CTFtime commands
-#
-
-
-# send some brief details about a CTFtime entry
-@client.command(aliases=['ctf'])
-async def ctftime(ctx, *, code):
-    # check for valid ID
-    if not ctfTime.isCtfCodeValid(code):
-        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
-        return
-    
-    # grab the event details
-    title, reply = ctfTime.grabCtfDetails(code)
-    # errors if the event ID doesn't correspond with an actual ctftime event
-    if not title:
-        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
-        return
-    await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
-
-# send some brief details about a CTFtime entry
-@client.command()
-async def ctfnow(ctx):
-    # grab from RSS feed
-    rssFeed = ctfTime.currentCTFs()
-    for entry in rssFeed['entries']:
-        title, reply = ctfTime.buildReplyRSS(entry)
-        await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
-
-
 
 
 
