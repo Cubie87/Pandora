@@ -85,6 +85,9 @@ client = commands.Bot(
     intents = intents
 )
 
+# Define ChatGPT preexisting threads. TODO: Expire these eventually.
+chatGPTThreads = []
+
 
 
 
@@ -134,6 +137,11 @@ async def on_message(message):
         # Black Hanekawa Cat Gif
         await message.channel.send(file = discord.File(media + "teehee0.gif"))
         return
+
+    # Check if a message is in a channel that equates chatGPT thread
+    for thread in chatGPTThreads:
+        if message.channel.id == thread:
+            await do_chat(message)
 
     # continue processing bot commands
     await client.process_commands(message)
@@ -339,26 +347,71 @@ async def grab(ctx, *, link):
 # chatbot functionality written by chatGPT
 @client.command() # hide it from help command returns.
 async def chat(ctx, *, prompt):
+    global client, chatGPTThreads
+
+    # Call chat thread function
+    await do_chat(ctx.message, prompt, False)
+
+
+# chatbot functionality written by chatGPT
+@client.command() # hide it from help command returns.
+async def converse(ctx, *, prompt):
+    global client, chatGPTThreads
+
+    # Call chat thread function
+    await do_chat(ctx.message, prompt, True)
+
+
+# chatbot functionality written by chatGPT, specifically for thread IDs that bot is listening to
+async def do_chat (message, prompt = "", is_thread = True):
+    global client
+
     # acknowledge prompt has been seen.
-    await ctx.message.add_reaction("👍")
+    await message.add_reaction("👍")
     #print(prompt) # verify the prompt has preamble removed.
     response = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
+    
+    # Pull the Discord message thread; if it doesn't exist, create a new one
+    context = prompt
+    if (is_thread):
+        context = ""
+        if message.channel.type == discord.ChannelType.public_thread:
+            # Add each message in thread
+            thread = message.channel
+            async for m in message.channel.history(limit=100, oldest_first=True):
+                context += m.author.display_name + ": " + m.content + "\n"
 
+            # Add this thread if it was removed during a restart
+            if (thread.id not in chatGPTThreads):
+                chatGPTThreads.append(thread.id)
+        else:
+            # Create a new thread, with the prompt as the first message
+            prompter_name = message.author.display_name
+            context = prompter_name + ": " + prompt + "\n"
+            thread = await message.create_thread(name="Chat with " + prompter_name)
+            
+            # Add this thread's channelID to the list of threads to listen to
+            chatGPTThreads.append(thread.id)
+
+        # Append current discord bot's name
+        context += client.user.display_name + ": "
+    else:
+        # If not threaded, which just send to parent channel by default
+        thread = message.channel
+
+    # Provide the context, pull the response
     response = openai.Completion.create(
         engine="text-davinci-003",
-        prompt=prompt,
+        prompt=context,
         max_tokens=1024,
         temperature=0.5,
     )
     response_text = response["choices"][0]["text"]
 
     # Send the generated response back to the channel
-    await ctx.send(response_text)
+    await thread.send(response_text)
     # acknowledge response has been sent.
-    await ctx.message.add_reaction("✅")
-
-
-
+    await message.add_reaction("✅")
 
 
 
