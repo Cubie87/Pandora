@@ -347,8 +347,6 @@ async def grab(ctx, *, link):
 # chatbot functionality written by chatGPT
 @client.command() # hide it from help command returns.
 async def chat(ctx, *, prompt):
-    global client, chatGPTThreads
-
     # Call chat thread function
     await do_chat(ctx.message, prompt, False)
 
@@ -356,15 +354,13 @@ async def chat(ctx, *, prompt):
 # chatbot functionality written by chatGPT
 @client.command() # hide it from help command returns.
 async def converse(ctx, *, prompt):
-    global client, chatGPTThreads
-
     # Call chat thread function
     await do_chat(ctx.message, prompt, True)
 
 
 # chatbot functionality written by chatGPT, specifically for thread IDs that bot is listening to
 async def do_chat (message, prompt = "", is_thread = True):
-    global client
+    global client, chatGPTThreads
 
     # acknowledge prompt has been seen.
     await message.add_reaction("👍")
