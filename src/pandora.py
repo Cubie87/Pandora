@@ -119,6 +119,9 @@ async def on_message(message):
     # don't respond to self
     if message.author == client.user:
         return
+    # don't respond to blocked users.
+    if any(users == message.author.id for users in botVars.blocklist): 
+        return
     
     # don't respond to DMs
     if isinstance(message.channel, discord.channel.DMChannel):
