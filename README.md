@@ -5,7 +5,6 @@ A custom discord bot :D
  - Expanded to be able to cache and play YouTube audio (using yt-dlp)
  - Can grab video's audio for on the go listening (eg, on the bus), allowing for phone to be locked
     - This bypasses YouTube's paid feature where you can turn your screen off and still listen
- - Can give brief details on CTFtime event details
  - Has a ChatGPT interface (chat-davinci-003 model)
 
 
