@@ -351,7 +351,7 @@ async def chat(ctx, *, prompt):
     response = openai.Completion.create(
         model="text-davinci-003",
         prompt=prompt,
-        #max_tokens=1024,
+        max_tokens=1024,
         temperature=0.5,
     )
     response_text = response["choices"][0]["text"]
