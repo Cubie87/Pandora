@@ -47,7 +47,9 @@ discordToken = os.getenv("DISCORD_TOKEN")
 # OpenAI Things for chatbot models
 openai.api_key = os.getenv("OPENAI_TOKEN")
 
-
+# blocklist
+blocklist = []
+blocklistFile = "blocklist.txt"
 
 # folder for cached media (for audio downloads)
 media = "media/ "
@@ -91,6 +93,11 @@ client = commands.Bot(
 # startup message in console.
 @client.event
 async def on_ready(): # do this on startup
+    # load blocklist
+    global blocklist
+    f = open(blocklistFile, "r")
+    blocklist = f.read().splitlines()
+    f.close()
     # announces when the bot is up and running
     print(f"{client.user} is now online and is connected to " + str(len(client.guilds)) + " servers: ")
     # list servers by server name where Pandora exists in on bootup.
@@ -120,7 +127,7 @@ async def on_message(message):
     if message.author == client.user:
         return
     # don't respond to blocked users.
-    if any(users == message.author.id for users in botVars.blocklist): 
+    if any(int(users) == message.author.id for users in blocklist): 
         return
     
     # don't respond to DMs
@@ -404,7 +411,26 @@ async def bail(ctx, *, ID):
         print("Guild does not exist! ID: " + guild.name)
         await ctx.send("I'm not part of this guild! Check the ID please.")
 
-        
+
+# Get the bot to block someone.
+@client.command(hidden = True) # hide it from help command returns.
+@commands.is_owner()
+async def block(ctx, *, ID):
+    f = open(blocklistFile, "a")
+    f.write("\n" + ID)
+    f.close()
+    await ctx.send(embed = discord.Embed(title = "Blocked User " + ID, description = "Remember to `refresh`!.", color = 0xFF2222))
+
+# Get the bot to block someone.
+@client.command(hidden = True) # hide it from help command returns.
+@commands.is_owner()
+async def refresh(ctx):
+    global blocklist
+    f = open(blocklistFile, "r")
+    blocklist = f.read().splitlines()
+    await ctx.send(embed = discord.Embed(title = "Updated Blocklist", color = 0xFF2222))
+
+
 # shut down the bot
 @client.command(hidden = True)
 @commands.is_owner()

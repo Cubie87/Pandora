@@ -24,6 +24,8 @@ Use `help` (with prefix) to see commands in Discord.
 The bot owner is also able to use the following commands:
  - `list`: list all the guilds that the bot is part of
  - `bail`: leave a guild
+ - `block`: block a user (numerical ID required)
+ - `refresh`: reload the blocklist
  - `sleep`: shut down the bot
 
 Bail allows the bot to be removed from a server without the owner being part of said server.
@@ -50,9 +52,8 @@ class botVars:
 ```
 The prefix should be a single character used as the prefix for bot commands.
 
-Then, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora.
 
-Alternatively, to run without docker, install dependences 
+Then, install dependences 
 
 ### Program Dependencies
 
@@ -79,5 +80,8 @@ Then run `run.sh`
 chmod +x run.sh
 ./run.sh
 ```
+
+
+Alternatively, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora. Please note that the docker image is not thoroughly tested and may contain bugs.
 
 Generate a discord bot invite URL on the applications page and invite to a server. 
