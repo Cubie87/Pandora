@@ -340,12 +340,6 @@ async def grab(ctx, *, link):
 
 
 
-
-
-
-
-
-
 # chatbot functionality written by chatGPT
 @client.command() # hide it from help command returns.
 async def chat(ctx, *, prompt):
@@ -354,13 +348,13 @@ async def chat(ctx, *, prompt):
     #print(prompt) # verify the prompt has preamble removed.
     response = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
 
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=1024,
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        #max_tokens=1024,
         temperature=0.5,
     )
-    response_text = response["choices"][0]["text"]
+    response_text = response['choices'][0]['message']['content']
 
     # Send the generated response back to the channel
     await ctx.send(response_text)
