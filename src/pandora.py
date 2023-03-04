@@ -47,10 +47,6 @@ discordToken = os.getenv("DISCORD_TOKEN")
 # OpenAI Things for chatbot models
 openai.api_key = os.getenv("OPENAI_TOKEN")
 
-# blocklist
-blocklist = []
-blocklistFile = "blocklist.txt"
-
 # folder for cached media (for audio downloads)
 media = "media/ "
 media = media[:-1]
@@ -93,11 +89,6 @@ client = commands.Bot(
 # startup message in console.
 @client.event
 async def on_ready(): # do this on startup
-    # load blocklist
-    global blocklist
-    f = open(blocklistFile, "r")
-    blocklist = f.read().splitlines()
-    f.close()
     # announces when the bot is up and running
     print(f"{client.user} is now online and is connected to " + str(len(client.guilds)) + " servers: ")
     # list servers by server name where Pandora exists in on bootup.
@@ -127,7 +118,7 @@ async def on_message(message):
     if message.author == client.user:
         return
     # don't respond to blocked users.
-    if any(int(users) == message.author.id for users in blocklist): 
+    if any(int(users) == message.author.id for users in botVars.blocklist): 
         return
     
     # don't respond to DMs
@@ -357,11 +348,16 @@ async def chat(ctx, *, prompt):
         max_tokens=1024,
         temperature=0.5,
     )
+
     response_text = response['choices'][0]['message']['content']
+    # logs responses.
+    f = open("gptlog.log", "a")
+    f.write("P: " + prompt + "\nA: " + response_text + "\n\n\n")
+    f.close()
 
     # Send the generated response back to the channel
     n = 1800
-    chunks = [response_text[i:i+n] for i in range(0, len(response_text), n)]
+    chunks = [response_text[i:i+n] for i in range(0, len(response_text), n)] # split response to lengths of n to bypass discord's character limit.
     for snippet in chunks:
         await ctx.send(snippet)
     # acknowledge response has been sent.
@@ -410,25 +406,6 @@ async def bail(ctx, *, ID):
     except:
         print("Guild does not exist! ID: " + guild.name)
         await ctx.send("I'm not part of this guild! Check the ID please.")
-
-
-# Get the bot to block someone.
-@client.command(hidden = True) # hide it from help command returns.
-@commands.is_owner()
-async def block(ctx, *, ID):
-    f = open(blocklistFile, "a")
-    f.write("\n" + ID)
-    f.close()
-    await ctx.send(embed = discord.Embed(title = "Blocked User " + ID, description = "Remember to `refresh`!.", color = 0xFF2222))
-
-# Get the bot to block someone.
-@client.command(hidden = True) # hide it from help command returns.
-@commands.is_owner()
-async def refresh(ctx):
-    global blocklist
-    f = open(blocklistFile, "r")
-    blocklist = f.read().splitlines()
-    await ctx.send(embed = discord.Embed(title = "Updated Blocklist", color = 0xFF2222))
 
 
 # shut down the bot

@@ -5,7 +5,7 @@ A custom discord bot :D
  - Expanded to be able to cache and play YouTube audio (using yt-dlp)
  - Can grab video's audio for on the go listening (eg, on the bus), allowing for phone to be locked
     - This bypasses YouTube's paid feature where you can turn your screen off and still listen
- - Has a ChatGPT interface (text-davinci-003)
+ - Has a ChatGPT interface (gpt-3.5-turbo)
 
 
 ## Usage
@@ -18,14 +18,12 @@ Use `help` (with prefix) to see commands in Discord.
  - `leave` (or `dc`): leave the connected voice channel in the server
  - `play` (or `p`): play some music (control with `pause`/`resume`/`stop`)
  - `grab`: grab a youtube video, extract the audio, and reply with the audio file as a `.mp3`
- - `chat`: chat with the bot (OpenAI's text-davinci-003)
+ - `chat`: chat with the bot (OpenAI's gpt-3.5-turbo)
  
 
 The bot owner is also able to use the following commands:
  - `list`: list all the guilds that the bot is part of
  - `bail`: leave a guild
- - `block`: block a user (numerical ID required)
- - `refresh`: reload the blocklist
  - `sleep`: shut down the bot
 
 Bail allows the bot to be removed from a server without the owner being part of said server.
@@ -49,6 +47,7 @@ DISCORD_TOKEN=[Discord token here]
 class botVars:
     prefix = [prefix]
     owner = [numerical Discord ID]
+    blocklist = [list of numerical Discord ID] # can be empty list
 ```
 The prefix should be a single character used as the prefix for bot commands.
 
