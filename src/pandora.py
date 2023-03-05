@@ -339,17 +339,14 @@ async def chat(ctx, *, prompt):
     #print(prompt) # verify the prompt has preamble removed.
     response = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
 
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt},
-        ],
+    response = openai.Completion.create(
+        model="chat-davinci-003",
+        prompt=prompt,
         max_tokens=1024,
         temperature=0.5,
     )
 
-    response_text = response['choices'][0]['message']['content']
+    response_text = response["choices"][0]["text"]
     # logs responses.
     f = open("gptlog.log", "a")
     f.write("P: " + prompt + "\nA: " + response_text + "\n\n\n")
