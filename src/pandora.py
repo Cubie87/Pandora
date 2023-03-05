@@ -340,7 +340,7 @@ async def chat(ctx, *, prompt):
     response = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
 
     response = openai.Completion.create(
-        model="chat-davinci-003",
+        model="text-davinci-003",
         prompt=prompt,
         max_tokens=1024,
         temperature=0.5,
