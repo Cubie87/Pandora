@@ -65,7 +65,7 @@ sudo apt install screen
 
 If you don't have python3 and pip already, install them
 ```bash
-sudo apt install python-is-python3 python3-pip
+sudo apt install python-is-python3 python3-pip ffmpeg
 ```
 
 Install python dependencies
