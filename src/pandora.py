@@ -20,7 +20,6 @@ import re # regex
 from variables import botVars
 import diceRoller 
 import audioTools
-import ctfTime
 
 
 # chatbot fun things
@@ -123,6 +122,10 @@ async def on_message(message):
     
     # don't respond to DMs
     if isinstance(message.channel, discord.channel.DMChannel):
+        return
+    
+    # don't respond to threads
+    if isinstance(message.channel, discord.channel.Thread):
         return
     
     # furry reply
