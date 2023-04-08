@@ -20,7 +20,6 @@ import re # regex
 from variables import botVars
 import diceRoller 
 import audioTools
-import ctfTime
 
 
 # chatbot fun things
@@ -46,8 +45,6 @@ discordToken = os.getenv("DISCORD_TOKEN")
 
 # OpenAI Things for chatbot models
 openai.api_key = os.getenv("OPENAI_TOKEN")
-
-
 
 # folder for cached media (for audio downloads)
 media = "media/ "
@@ -122,9 +119,16 @@ async def on_message(message):
     # don't respond to self
     if message.author == client.user:
         return
+    # don't respond to blocked users.
+    if any(int(users) == message.author.id for users in botVars.blocklist): 
+        return
     
     # don't respond to DMs
     if isinstance(message.channel, discord.channel.DMChannel):
+        return
+    
+    # don't respond to threads
+    if isinstance(message.channel, discord.channel.Thread):
         return
     
     # furry reply
@@ -338,12 +342,6 @@ async def grab(ctx, *, link):
 
 
 
-
-
-
-
-
-
 # chatbot functionality written by chatGPT
 @client.command() # hide it from help command returns.
 async def chat(ctx, *, prompt):
@@ -402,10 +400,18 @@ async def do_chat (message, prompt = "", is_thread = True):
         max_tokens=1024,
         temperature=0.5,
     )
+
     response_text = response["choices"][0]["text"]
+    # logs responses.
+    f = open("gptlog.log", "a")
+    f.write("P: " + prompt + "\nA: " + response_text + "\n\n\n")
+    f.close()
 
     # Send the generated response back to the channel
-    await thread.send(response_text)
+    n = 1800
+    chunks = [response_text[i:i+n] for i in range(0, len(response_text), n)] # split response to lengths of n to bypass discord's character limit.
+    for snippet in chunks:
+        await thread.send(snippet)
     # acknowledge response has been sent.
     await message.add_reaction("✅")
 
@@ -450,7 +456,7 @@ async def bail(ctx, *, ID):
         print("Guild does not exist! ID: " + guild.name)
         await ctx.send("I'm not part of this guild! Check the ID please.")
 
-        
+
 # shut down the bot
 @client.command(hidden = True)
 @commands.is_owner()

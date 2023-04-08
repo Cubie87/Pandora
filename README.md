@@ -5,7 +5,7 @@ A custom discord bot :D
  - Expanded to be able to cache and play YouTube audio (using yt-dlp)
  - Can grab video's audio for on the go listening (eg, on the bus), allowing for phone to be locked
     - This bypasses YouTube's paid feature where you can turn your screen off and still listen
- - Has a ChatGPT interface (chat-davinci-003 model)
+ - Has a ChatGPT interface (text-davinci-003)
 
 
 ## Usage
@@ -18,7 +18,7 @@ Use `help` (with prefix) to see commands in Discord.
  - `leave` (or `dc`): leave the connected voice channel in the server
  - `play` (or `p`): play some music (control with `pause`/`resume`/`stop`)
  - `grab`: grab a youtube video, extract the audio, and reply with the audio file as a `.mp3`
- - `chat`: chat with the bot (OpenAI's chat-davinci-003 model)
+ - `chat`: chat with the bot (OpenAI's text-davinci-003)
  
 
 The bot owner is also able to use the following commands:
@@ -47,12 +47,12 @@ DISCORD_TOKEN=[Discord token here]
 class botVars:
     prefix = [prefix]
     owner = [numerical Discord ID]
+    blocklist = [list of numerical Discord ID] # can be empty list
 ```
 The prefix should be a single character used as the prefix for bot commands.
 
-Then, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora.
 
-Alternatively, to run without docker, install dependences 
+Then, install dependences 
 
 ### Program Dependencies
 
@@ -65,7 +65,7 @@ sudo apt install screen
 
 If you don't have python3 and pip already, install them
 ```bash
-sudo apt install python-is-python3 python3-pip
+sudo apt install python-is-python3 python3-pip ffmpeg
 ```
 
 Install python dependencies
@@ -79,5 +79,8 @@ Then run `run.sh`
 chmod +x run.sh
 ./run.sh
 ```
+
+
+Alternatively, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora. Please note that the docker image is not thoroughly tested and may contain bugs.
 
 Generate a discord bot invite URL on the applications page and invite to a server. 
