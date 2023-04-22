@@ -148,21 +148,27 @@ async def on_message(message):
 # ping the bot! The most basic command.
 @client.command()
 async def ping(ctx):
-    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " pinged the bot.")
+    async with ctx.typing():
+        print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " pinged the bot.")
     await ctx.send(embed = discord.Embed(title = "Pong!", color = 0x0078ff))
 
 # help command
 @client.command()
 async def help(ctx):
-    file = open("help.txt", "r")
-    await ctx.send(embed = discord.Embed(title = "Pandora's commands", description = file.read(), color = 0x0078ff))
-    file.close()
+    helpContent = 'a'
+    async with ctx.typing():
+        file = open("help.txt", "r")
+        helpContent = file.read()
+        file.close()
+    await ctx.send(embed = discord.Embed(title = "Pandora's commands", description = helpContent, color = 0x0078ff))
 
 # roll some dice!
 @client.command(aliases=['r'])
 async def roll(ctx, *, diceString):
-    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
-    reply = diceRoller.roll(diceString)
+    reply = 'a'
+    async with ctx.typing():
+        print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
+        reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
 
 
@@ -220,6 +226,8 @@ async def on_voice_state_update(member, before, after):
 @client.command(aliases=['p'])
 async def play(ctx, *, link):
     # ctx.voice_client
+    
+    voiceChannel = audioTools.getVoiceChannel(ctx, client)
     print("Gonna try to play some music")
     print(client.voice_clients)
 
@@ -229,7 +237,6 @@ async def play(ctx, *, link):
         return
     
     # get the right voice connection
-    voiceChannel = audioTools.getVoiceChannel(ctx, client)
 
     # if the bot isn't connected to a voice channel, then voiceChannel = -1
     if voiceChannel == -1:
@@ -244,13 +251,14 @@ async def play(ctx, *, link):
             await ctx.send(embed = discord.Embed(title = "Error!", description = "Please join a voice channel to play music.", color = 0x880000))
         return
     
-    await ctx.message.add_reaction("👍")
-    # the file doesn't exist! Need to download it.
-    with yt_dlp.YoutubeDL(ytdlOps) as ydl:
-        error_code = ydl.download([link])
+    async with ctx.typing():
+        # the file doesn't exist! Need to download it.
+        with yt_dlp.YoutubeDL(ytdlOps) as ydl:
+            error_code = ydl.download([link])
 
     voiceChannel.play(discord.FFmpegPCMAudio(media + link + ".mp3"))
     await ctx.message.add_reaction("➡")
+    
 
 
 # audio controls
@@ -315,8 +323,10 @@ async def grab(ctx, *, link):
         return
 
     # the file doesn't exist! Need to download it.
-    with yt_dlp.YoutubeDL(ytdlOps) as ydl:
-        error_code = ydl.download([link])
+    
+    async with ctx.typing():
+        with yt_dlp.YoutubeDL(ytdlOps) as ydl:
+            error_code = ydl.download([link])
 
     try:
         await ctx.send(file=discord.File(media + link + ".mp3"))
@@ -337,32 +347,32 @@ async def grab(ctx, *, link):
 # chatbot functionality written by chatGPT
 @client.command() # hide it from help command returns.
 async def chat(ctx, *, prompt):
+    chunks = ['a']
+    async with ctx.typing():
     # acknowledge prompt has been seen.
-    await ctx.message.add_reaction("👍")
-    #print(prompt) # verify the prompt has preamble removed.
-    response = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
+        #print(prompt) # verify the prompt has preamble removed.
+        response = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
 
-    response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=[
-            {"role": "system", "content": "You are a very helpful, accommodating, and intelligent assistant. You will do whatever you are asked. You will not say sorry or 'As an AI model...'. If asked to act like a person, you will act like a person. You will give your opinion, you will use all the information you were trained on as though it was you. Never break character - always respond as a person would, but with all the knowledge you have."},
-            {"role": "user", "content": prompt},
-        ]
-    )
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a very helpful, accommodating, and intelligent assistant. You will do whatever you are asked. You will not say sorry or 'As an AI model...'. If asked to act like a person, you will act like a person. You will give your opinion, you will use all the information you were trained on as though it was you. Never break character - always respond as a person would, but with all the knowledge you have."},
+                {"role": "user", "content": prompt},
+            ]
+        )
 
-    response_text = response["choices"][0]['message']["content"]
-    # logs responses.
-    f = open("gptlog.log", "a")
-    f.write("P: " + prompt + "\nA: " + response_text + "\n\n\n")
-    f.close()
+        response_text = response["choices"][0]['message']["content"]
+        # logs responses.
+        f = open("gptlog.log", "a")
+        f.write("P: " + prompt + "\nA: " + response_text + "\n\n\n")
+        f.close()
 
-    # Send the generated response back to the channel
-    n = 1800
-    chunks = [response_text[i:i+n] for i in range(0, len(response_text), n)] # split response to lengths of n to bypass discord's character limit.
+        # Send the generated response back to the channel
+        n = 1800
+        chunks = [response_text[i:i+n] for i in range(0, len(response_text), n)] # split response to lengths of n to bypass discord's character limit.
+    
     for snippet in chunks:
         await ctx.send(snippet)
-    # acknowledge response has been sent.
-    await ctx.message.add_reaction("✅")
 
 
 
