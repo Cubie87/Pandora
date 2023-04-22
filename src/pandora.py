@@ -148,27 +148,23 @@ async def on_message(message):
 # ping the bot! The most basic command.
 @client.command()
 async def ping(ctx):
-    async with ctx.typing():
-        print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " pinged the bot.")
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " pinged the bot.")
     await ctx.send(embed = discord.Embed(title = "Pong!", color = 0x0078ff))
 
 # help command
 @client.command()
 async def help(ctx):
-    helpContent = 'a'
-    async with ctx.typing():
-        file = open("help.txt", "r")
-        helpContent = file.read()
-        file.close()
+    file = open("help.txt", "r")
+    helpContent = file.read()
+    file.close()
     await ctx.send(embed = discord.Embed(title = "Pandora's commands", description = helpContent, color = 0x0078ff))
 
 # roll some dice!
 @client.command(aliases=['r'])
 async def roll(ctx, *, diceString):
     reply = 'a'
-    async with ctx.typing():
-        print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
-        reply = diceRoller.roll(diceString)
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
+    reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
 
 
