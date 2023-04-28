@@ -20,6 +20,7 @@ import re # regex
 from variables import botVars
 import diceRoller 
 import audioTools
+import ctfTime
 
 
 # chatbot fun things
@@ -330,6 +331,74 @@ async def grab(ctx, *, link):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "File is too large.", color = 0x880000))
     else:
         await ctx.message.add_reaction("➡")
+
+
+
+
+
+
+
+#
+#
+# CTF Time functions
+#
+#
+
+
+
+
+# send some brief details about a CTFtime entry
+@client.command(aliases=['ctf'])
+async def ctftime(ctx, *, code):
+    # check for valid ID
+    if not ctfTime.isCtfCodeValid(code):
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
+        return
+    
+    # grab the event details
+    title, reply = ctfTime.grabCtfDetails(code)
+    # errors if the event ID doesn't correspond with an actual ctftime event
+    if not title:
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
+        return
+    await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
+
+# send some brief details about current CTFtimes
+@client.command()
+async def ctfnow(ctx):
+    # grab from RSS feed
+    rssFeed = ctfTime.currentCTFs()
+    for entry in rssFeed['entries']:
+        title, reply = ctfTime.buildReplyRSS(entry)
+        await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
+    await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
+
+
+# send some brief details about upcoming CTFtimes
+@client.command()
+async def ctfsoon(ctx):
+    # grab from RSS feed
+    num = 5 # default number to retrieve
+    # if the user specified a number to retrieve
+    if ctx.message.content != botVars.prefix + "ctfsoon":
+        a = ctx.message.content.index(" ")
+        num = int(float(ctx.message.content[a+1:]))
+    # retrieve and print
+    rssFeed = ctfTime.upcomingCTFs()
+    # prevent retrieving too many
+    if num > len(rssFeed['entries']):
+        num = len(rssFeed['entries'])
+    if num > 10:
+        num = 10
+    for entry in rssFeed['entries'][slice(0,num)]:
+        title, reply = ctfTime.buildReplyRSS(entry)
+        await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
+    await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
+
+
+
+
+
 
 
 
