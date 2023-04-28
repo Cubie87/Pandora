@@ -366,33 +366,35 @@ async def ctftime(ctx, *, code):
 # send some brief details about current CTFtimes
 @client.command()
 async def ctfnow(ctx):
-    # grab from RSS feed
-    rssFeed = ctfTime.currentCTFs()
-    for entry in rssFeed['entries']:
-        title, reply = ctfTime.buildReplyRSS(entry)
-        await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
+    async with ctx.typing():
+        # grab from RSS feed
+        rssFeed = ctfTime.currentCTFs()
+        for entry in rssFeed['entries']:
+            title, reply = ctfTime.buildReplyRSS(entry)
+            await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
     await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
 
 
 # send some brief details about upcoming CTFtimes
 @client.command()
 async def ctfsoon(ctx):
-    # grab from RSS feed
-    num = 5 # default number to retrieve
-    # if the user specified a number to retrieve
-    if ctx.message.content != botVars.prefix + "ctfsoon":
-        a = ctx.message.content.index(" ")
-        num = int(float(ctx.message.content[a+1:]))
-    # retrieve and print
-    rssFeed = ctfTime.upcomingCTFs()
-    # prevent retrieving too many
-    if num > len(rssFeed['entries']):
-        num = len(rssFeed['entries'])
-    if num > 10:
-        num = 10
-    for entry in rssFeed['entries'][slice(0,num)]:
-        title, reply = ctfTime.buildReplyRSS(entry)
-        await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
+    async with ctx.typing():
+        # grab from RSS feed
+        num = 5 # default number to retrieve
+        # if the user specified a number to retrieve
+        if ctx.message.content != botVars.prefix + "ctfsoon":
+            a = ctx.message.content.index(" ")
+            num = int(float(ctx.message.content[a+1:]))
+        # retrieve and print
+        rssFeed = ctfTime.upcomingCTFs()
+        # prevent retrieving too many
+        if num > len(rssFeed['entries']):
+            num = len(rssFeed['entries'])
+        if num > 10:
+            num = 10
+        for entry in rssFeed['entries'][slice(0,num)]:
+            title, reply = ctfTime.buildReplyRSS(entry)
+            await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
     await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
 
 
@@ -414,7 +416,7 @@ async def ctfsoon(ctx):
 async def chat(ctx, *, prompt):
     chunks = ['a']
     async with ctx.typing():
-    # acknowledge prompt has been seen.
+        # acknowledge prompt has been seen.
         #print(prompt) # verify the prompt has preamble removed.
         response = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
 
