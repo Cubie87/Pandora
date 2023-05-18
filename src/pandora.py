@@ -451,6 +451,28 @@ async def chat(ctx, *, prompt):
 
 
 
+
+
+#
+#
+## Restricted Server Commands
+#
+#
+
+
+# list all the guilds that the bot is part of
+@client.command(hidden = True) # hide it from help command returns.
+async def rsp(ctx):
+    if ctx.guild.id == botVars.rspServer:
+        reply = botVars.rspPrompt
+        await ctx.send(reply)
+
+
+
+
+
+
+
 #
 #
 # Everything below is administration commands for the bot, for the owner.
