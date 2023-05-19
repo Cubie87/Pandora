@@ -152,6 +152,7 @@ async def ping(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " pinged the bot.")
     await ctx.send(embed = discord.Embed(title = "Pong!", color = 0x0078ff))
 
+
 # help command
 @client.command()
 async def help(ctx):
@@ -160,10 +161,10 @@ async def help(ctx):
     file.close()
     await ctx.send(embed = discord.Embed(title = "Pandora's commands", description = helpContent, color = 0x0078ff))
 
+
 # roll some dice!
 @client.command(aliases=['r'])
 async def roll(ctx, *, diceString):
-    reply = 'a'
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
     reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
@@ -191,7 +192,6 @@ async def join(ctx):
     # otherwise, channel is the voice channel that the user is currently connected to.
     await channel.connect()
     await ctx.message.add_reaction("👍")
-    print("Joining a voice channel!")
 
 
 # disconnect from voice in relevant server
@@ -202,7 +202,6 @@ async def leave(ctx):
     except: # if we're not voice connected, let them know!
         await ctx.send(embed = discord.Embed(title = "Error!", description = "I'm not in a voice channel here!", color = 0x880000))
     else:
-        print("Leaving a voice channel!")
         await ctx.message.add_reaction("👍")
 
 
@@ -224,17 +223,16 @@ async def on_voice_state_update(member, before, after):
 async def play(ctx, *, link):
     # ctx.voice_client
     
+    # get the right voice connection
     voiceChannel = audioTools.getVoiceChannel(ctx, client)
     print("Gonna try to play some music")
     print(client.voice_clients)
 
-    
+    # check for invalid input to prevent data injection
     if audioTools.checkInvalidLink(link):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
         return
     
-    # get the right voice connection
-
     # if the bot isn't connected to a voice channel, then voiceChannel = -1
     if voiceChannel == -1:
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please connect the bot to a voice channel. `=join`", color = 0x880000))
@@ -248,11 +246,13 @@ async def play(ctx, *, link):
             await ctx.send(embed = discord.Embed(title = "Error!", description = "Please join a voice channel to play music.", color = 0x880000))
         return
     
+    # show typing while we download the file so the user knows something is happenning.
     async with ctx.typing():
         # the file doesn't exist! Need to download it.
         with yt_dlp.YoutubeDL(ytdlOps) as ydl:
             error_code = ydl.download([link])
 
+    # play the audio
     voiceChannel.play(discord.FFmpegPCMAudio(media + link + ".mp3"))
     await ctx.message.add_reaction("➡")
     
@@ -261,6 +261,7 @@ async def play(ctx, *, link):
 # audio controls
 
 
+# pause the audio
 @client.command()
 async def pause(ctx):
     # get voice channel
@@ -271,8 +272,8 @@ async def pause(ctx):
         return
     voiceChannel.pause()
     await ctx.message.add_reaction("👍")
-    print("Pausing")
-    
+
+# resume audio playback
 @client.command()
 async def resume(ctx):
     # get voice channel
@@ -283,8 +284,8 @@ async def resume(ctx):
         return
     voiceChannel.resume()
     await ctx.message.add_reaction("👍")
-    print("Resuming Playback")
-    
+
+# stop playing audio
 @client.command()
 async def stop(ctx):
     # get voice channel
@@ -295,7 +296,6 @@ async def stop(ctx):
         return
     voiceChannel.stop()
     await ctx.message.add_reaction("👍")
-    print("Stopping Playback")
 
 
 
@@ -303,7 +303,7 @@ async def stop(ctx):
 # download and send some audio
 @client.command()
 async def grab(ctx, *, link):
-    # check for attack    
+    # check for invalid links    
     if audioTools.checkInvalidLink(link):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
         return
@@ -320,17 +320,15 @@ async def grab(ctx, *, link):
         return
 
     # the file doesn't exist! Need to download it.
-    
     async with ctx.typing():
         with yt_dlp.YoutubeDL(ytdlOps) as ydl:
             error_code = ydl.download([link])
 
+    # try send the file. If there's an error, it's probably too big
     try:
         await ctx.send(file=discord.File(media + link + ".mp3"))
     except:
         await ctx.send(embed = discord.Embed(title = "Error!", description = "File is too large.", color = 0x880000))
-    else:
-        await ctx.message.add_reaction("➡")
 
 
 
@@ -354,7 +352,7 @@ async def ctftime(ctx, *, code):
     if not ctfTime.isCtfCodeValid(code):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
         return
-    
+
     # grab the event details
     title, reply = ctfTime.grabCtfDetails(code)
     # errors if the event ID doesn't correspond with an actual ctftime event
@@ -362,6 +360,7 @@ async def ctftime(ctx, *, code):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
         return
     await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
+
 
 # send some brief details about current CTFtimes
 @client.command()
@@ -460,7 +459,7 @@ async def chat(ctx, *, prompt):
 #
 
 
-# list all the guilds that the bot is part of
+# print the rsp prompt, but only in the correct server
 @client.command(hidden = True) # hide it from help command returns.
 async def rsp(ctx):
     if ctx.guild.id == botVars.rspServer:
@@ -494,7 +493,7 @@ async def list(ctx):
     await ctx.send(reply)
 
 
-# Get the bot to leave this guild
+# Get the bot to leave a specified guild
 @client.command(hidden = True)
 @commands.is_owner()
 async def bail(ctx, *, ID):
