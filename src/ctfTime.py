@@ -24,7 +24,7 @@ def buildReplyJson(eventJson):
 
     # note the disccord formatting used for the timestamps.
     # the split function it to remove all trailing decimals
-    reply = "Organised by: **" + str(eventJson['organizers'][0]['name']) + "**\nStart Time: <t:" + str(unixStart).split('.')[0] + ":F>\nEnd Time: <t:" + str(unixEnd).split('.')[0] + ":F>\nDuration: " + str(eventJson['duration']['days']) + " Days, " + str(eventJson['duration']['hours']) + " Hours" + "\nCTF Time URL: " + str(eventJson['ctftime_url']) + "\nFormat: " + str(eventJson['format'])
+    reply = "Organised by: **" + str(eventJson['organizers'][0]['name']) + "**\nOfficial URL: " + str(eventJson['url']) + "\nStart Time: <t:" + str(unixStart).split('.')[0] + ":F>\nEnd Time: <t:" + str(unixEnd).split('.')[0] + ":F>\nDuration: " + str(eventJson['duration']['days']) + " Days, " + str(eventJson['duration']['hours']) + " Hours" + "\nCTF Time URL: " + str(eventJson['ctftime_url']) + "\nFormat: " + str(eventJson['format']) + "\nWeight: " + str(eventJson['weight'])
     return reply
 
 
@@ -39,7 +39,7 @@ def buildReplyRSS(rssFeed):
     # the split function it to remove all trailing decimals
     # note the disccord formatting used for the timestamps.
     # note that duration doesn't exist in the rss feed
-    reply = "Organised by: **" + str(organisers[0]['name']) + "**\nStart Time: <t:" + str(unixStart).split('.')[0] + ":F>\nEnd Time: <t:" + str(unixEnd).split('.')[0] + ":F>\nCTF Time URL: " + str(rssFeed['link']) + "\nFormat: " + str(rssFeed['format_text'])
+    reply = "Organised by: **" + str(organisers[0]['name']) + "**\nOfficial URL: " + str(rssFeed['href']) + "\nStart Time: <t:" + str(unixStart).split('.')[0] + ":F>\nEnd Time: <t:" + str(unixEnd).split('.')[0] + ":F>\nCTF Time URL: " + str(rssFeed['link']) + "\nFormat: " + str(rssFeed['format_text']) + "\nWeight: " + str(rssFeed['weight'])
     return rssFeed['title'], reply
 
 
