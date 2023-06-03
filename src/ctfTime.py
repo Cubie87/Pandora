@@ -28,7 +28,7 @@ def buildReplyJson(eventJson):
     return reply
 
 
-# build the reply card from json format.
+# build the reply card from RSS format.
 def buildReplyRSS(rssFeed):
     # convert the timestamps provided into Unix epoch for discord formatting.
     unixStart = datetime.strptime(str(rssFeed['start_date']) + "+0000", '%Y%m%dT%H%M%S%z').timestamp() #20230114T000000
