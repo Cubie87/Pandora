@@ -156,6 +156,7 @@ async def ping(ctx):
 # help command
 @client.command()
 async def help(ctx):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " ran the help command.")
     file = open("help.txt", "r")
     helpContent = file.read()
     file.close()
@@ -183,6 +184,7 @@ async def roll(ctx, *, diceString):
 # join a voice channel
 @client.command(aliases=['j'])
 async def join(ctx):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " added the bot to a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.ID))
     # runs a pre-join check to see if the message is valid
     channel = audioTools.preJoinCheck(ctx)
     # if the user is not in a channel, then channel = 0, and there will be an error message
@@ -197,6 +199,7 @@ async def join(ctx):
 # disconnect from voice in relevant server
 @client.command(aliases=['dc'])
 async def leave(ctx):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " disconnected the bot from a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.ID))
     try:
         await ctx.voice_client.disconnect()
     except: # if we're not voice connected, let them know!
@@ -221,7 +224,7 @@ async def on_voice_state_update(member, before, after):
 # play some audio
 @client.command(aliases=['p'])
 async def play(ctx, *, link):
-    # ctx.voice_client
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " played some music. " + str(link))
     
     # get the right voice connection
     voiceChannel = audioTools.getVoiceChannel(ctx, client)
@@ -303,6 +306,7 @@ async def stop(ctx):
 # download and send some audio
 @client.command()
 async def grab(ctx, *, link):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " grabbed some audio. " + str(link))
     # check for invalid links    
     if audioTools.checkInvalidLink(link):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
@@ -348,6 +352,7 @@ async def grab(ctx, *, link):
 # send some brief details about a CTFtime entry
 @client.command(aliases=['ctf'])
 async def ctftime(ctx, *, code):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved CTF information." + str(code))
     # check for valid ID
     if not ctfTime.isCtfCodeValid(code):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
@@ -365,6 +370,7 @@ async def ctftime(ctx, *, code):
 # send some brief details about current CTFtimes
 @client.command()
 async def ctfnow(ctx):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved current CTF information.")
     async with ctx.typing():
         # grab from RSS feed
         rssFeed = ctfTime.currentCTFs()
@@ -377,6 +383,7 @@ async def ctfnow(ctx):
 # send some brief details about upcoming CTFtimes
 @client.command()
 async def ctfsoon(ctx):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved upcoming CTF information.")
     async with ctx.typing():
         # grab from RSS feed
         num = 5 # default number to retrieve
@@ -413,6 +420,7 @@ async def ctfsoon(ctx):
 # chatbot functionality written by chatGPT
 @client.command() # hide it from help command returns.
 async def chat(ctx, *, prompt):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " talked to the bot (GPT).")
     chunks = ['a']
     async with ctx.typing():
         # acknowledge prompt has been seen.
