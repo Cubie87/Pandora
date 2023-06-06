@@ -400,6 +400,7 @@ async def ctfsoon(ctx):
             num = len(rssFeed['entries'])
         if num > 10:
             num = 10
+        # send all the ones retrieved
         for entry in rssFeed['entries'][slice(0,num)]:
             title, reply = ctfTime.buildReplyRSS(entry)
             await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
@@ -436,13 +437,15 @@ async def metro(ctx):
         print(userTweets)
         # find useful tweets
         for tweet in userTweets:
-            # break if older than a day
-            if today != tweet['content']['content']['tweetResult']['result']['legacy']['created_at'][:3]:
+            sent = tweet['content']['content']['tweetResult']['result']['legacy']['created_at']
+            # break if not sent today
+            if today != sent[:3]:
                 break
             # otherwise retrieve text and send
             tweetText = tweet['content']['content']['tweetResult']['result']['legacy']['full_text']
+            # only send if relevant, matches metroRegex
             if re.search(botVars.metroRegex, tweetText):
-                await ctx.send(embed = discord.Embed(title = "Done", description = tweetText, color = 0xFFFFFF))
+                await ctx.send(embed = discord.Embed(title = "Tweet", description = tweetText + '\n\n' + sent, color = 0xFFFFFF))
     await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
 
 
