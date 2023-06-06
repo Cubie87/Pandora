@@ -18,6 +18,7 @@ Use `help` (with prefix) to see commands in Discord.
  - `leave` (or `dc`): leave the connected voice channel in the server
  - `play` (or `p`): play some music (control with `pause`/`resume`/`stop`)
  - `grab`: grab a youtube video, extract the audio, and reply with the audio file as a `.mp3`
+ - `metro`: print some local metro information
  - `chat`: chat with the bot (OpenAI's text-davinci-003)
  
 
@@ -51,6 +52,7 @@ class botVars:
 ```
 The prefix should be a single character used as the prefix for bot commands.
 
+Remove the rsp command, along with the metro command
 
 Then, install dependences 
 
