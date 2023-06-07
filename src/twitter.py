@@ -1,7 +1,7 @@
 import requests
 import re
 
-def retrieveTwitter(twitterAPIurl, twitterUser, twitterAPIkey, twitterAPIhost):
+def retrieveUserTweets(twitterAPIurl, twitterUser, twitterAPIkey, twitterAPIhost):
     querystring = {"username":twitterUser}
     headers = {
         "X-RapidAPI-Key": twitterAPIkey,

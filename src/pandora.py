@@ -498,19 +498,19 @@ async def metro(ctx):
         # get current day of the week
         rightNow = int(datetime.now().timestamp())
         # retrieve tweets
-        userTweets = twitter.retrieveTwitter(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
+        userTweets = twitter.retrieveUserTweets(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
         # find useful tweets
         for tweet in userTweets:
             # get post timestamp as a unix epoch
             unixpost = int(datetime.strptime(str(tweet['content']['content']['tweetResult']['result']['legacy']['created_at']), '%a %b %d %H:%M:%S %z %Y').timestamp())
-            # break if not sent today
+            # break if not sent in the past 24 hours
             if unixpost < rightNow - 86400:
                 break
-            # otherwise retrieve text and send
+            # otherwise retrieve text
             tweetText = tweet['content']['content']['tweetResult']['result']['legacy']['full_text']
-            # only send if relevant, matches metroRegex
+            # only send if tweet text matches metroRegex
             if re.search(botVars.metroRegex, tweetText):
-                await ctx.send(embed = discord.Embed(title = "Tweet", description = tweetText + '\n\n' + "<t:" + str(unixpost) + ":F>", color = 0xFFFFFF))
+                await ctx.send(embed = discord.Embed(title = "<t:" + str(unixpost) + ":F>", description = tweetText, color = 0xFFFFFF))
     await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
 
 
