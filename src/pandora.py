@@ -496,22 +496,21 @@ async def metro(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved metro information.")
     async with ctx.typing():
         # get current day of the week
-        dt = datetime.now()
-        today = dt.strftime('%A')[:3]
+        rightNow = int(datetime.now().timestamp())
         # retrieve tweets
         userTweets = twitter.retrieveTwitter(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
-        print(userTweets)
         # find useful tweets
         for tweet in userTweets:
-            sent = tweet['content']['content']['tweetResult']['result']['legacy']['created_at']
+            # get post timestamp as a unix epoch
+            unixpost = int(datetime.strptime(str(tweet['content']['content']['tweetResult']['result']['legacy']['created_at']), '%a %b %d %H:%M:%S %z %Y').timestamp())
             # break if not sent today
-            if today != sent[:3]:
+            if unixpost < rightNow - 86400:
                 break
             # otherwise retrieve text and send
             tweetText = tweet['content']['content']['tweetResult']['result']['legacy']['full_text']
             # only send if relevant, matches metroRegex
             if re.search(botVars.metroRegex, tweetText):
-                await ctx.send(embed = discord.Embed(title = "Tweet", description = tweetText + '\n\n' + sent, color = 0xFFFFFF))
+                await ctx.send(embed = discord.Embed(title = "Tweet", description = tweetText + '\n\n' + "<t:" + str(unixpost) + ":F>", color = 0xFFFFFF))
     await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
 
 
