@@ -413,47 +413,6 @@ async def ctfsoon(ctx):
 
 
 
-#
-#
-## Metro Tweets
-#
-#
-
-
-
-
-
-
-# send a brief summary of metro status
-@client.command()
-async def metro(ctx):
-    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved metro information.")
-    async with ctx.typing():
-        # get current day of the week
-        dt = datetime.now()
-        today = dt.strftime('%A')[:3]
-        # retrieve tweets
-        userTweets = twitter.retrieveTwitter(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
-        print(userTweets)
-        # find useful tweets
-        for tweet in userTweets:
-            sent = tweet['content']['content']['tweetResult']['result']['legacy']['created_at']
-            # break if not sent today
-            if today != sent[:3]:
-                break
-            # otherwise retrieve text and send
-            tweetText = tweet['content']['content']['tweetResult']['result']['legacy']['full_text']
-            # only send if relevant, matches metroRegex
-            if re.search(botVars.metroRegex, tweetText):
-                await ctx.send(embed = discord.Embed(title = "Tweet", description = tweetText + '\n\n' + sent, color = 0xFFFFFF))
-    await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
-
-
-
-
-
-
-
 
 
 
@@ -516,6 +475,47 @@ async def rsp(ctx):
     if ctx.guild.id == botVars.rspServer:
         reply = botVars.rspPrompt
         await ctx.send(reply)
+
+
+
+
+#
+#
+## Metro Tweets (Owner Only)
+#
+#
+
+
+
+
+
+
+# send a brief summary of metro status
+@client.command()
+async def metro(ctx):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved metro information.")
+    async with ctx.typing():
+        # get current day of the week
+        dt = datetime.now()
+        today = dt.strftime('%A')[:3]
+        # retrieve tweets
+        userTweets = twitter.retrieveTwitter(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
+        print(userTweets)
+        # find useful tweets
+        for tweet in userTweets:
+            sent = tweet['content']['content']['tweetResult']['result']['legacy']['created_at']
+            # break if not sent today
+            if today != sent[:3]:
+                break
+            # otherwise retrieve text and send
+            tweetText = tweet['content']['content']['tweetResult']['result']['legacy']['full_text']
+            # only send if relevant, matches metroRegex
+            if re.search(botVars.metroRegex, tweetText):
+                await ctx.send(embed = discord.Embed(title = "Tweet", description = tweetText + '\n\n' + sent, color = 0xFFFFFF))
+    await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
+
+
+
 
 
 
