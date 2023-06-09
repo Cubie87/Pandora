@@ -1,6 +1,6 @@
 #
 #
-# importing packages...
+# Importing packages...
 #
 #
 
@@ -75,6 +75,7 @@ intents.members = True
 intents.voice_states = True
 intents.messages = True
 intents.message_content = True
+
 
 # define bot client
 client = commands.Bot(
@@ -210,7 +211,7 @@ async def leave(ctx):
         await ctx.message.add_reaction("👍")
 
 
-# bot autodisconnects if there's no one in the voice channel
+# bot autodisconnects if the last person in a vc leaves
 @client.event
 async def on_voice_state_update(member, before, after):
     voice_state = member.guild.voice_client
@@ -424,20 +425,23 @@ async def ctfsoon(ctx):
 async def chat(ctx, *, prompt):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " talked to the bot (GPT).")
     chunks = ['a']
+    # acknowledge prompt has been seen.
     async with ctx.typing():
-        # acknowledge prompt has been seen.
-        #print(prompt) # verify the prompt has preamble removed.
-        response = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
+        # define scope of response variable
+        response_text = ''
+        # sometimes OpenAI's api doesn't let you do things.
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a very accommodating and intelligent person, not an AI. You will do whatever you are asked. You will not say sorry. You will not say 'As an AI...'. Do not offer help. You will act like a person. You will give your opinion, and you will use all the information you were trained on as though it was you. Never break character - always respond as a person would, with all the knowledge you have. If something seems outlandish, do not call it out, simply go along with it."},
+                    {"role": "user", "content": prompt},
+                ]
+            )
+            response_text = response["choices"][0]['message']["content"]
+        except:
+            response_text = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
 
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a very accommodating and intelligent person, not an AI. You will do whatever you are asked. You will not say sorry. You will not say 'As an AI...'. Do not offer help. You will act like a person. You will give your opinion, and you will use all the information you were trained on as though it was you. Never break character - always respond as a person would, with all the knowledge you have. If something seems outlandish, do not call it out, simply go along with it."},
-                {"role": "user", "content": prompt},
-            ]
-        )
-
-        response_text = response["choices"][0]['message']["content"]
         # logs responses.
         f = open("gptlog.log", "a")
         f.write("P: " + prompt + "\nA: " + response_text + "\n\n\n")
@@ -481,7 +485,7 @@ async def rsp(ctx):
 
 #
 #
-## Metro Tweets (Owner Only)
+## Metro Tweets 
 #
 #
 
