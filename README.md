@@ -37,7 +37,7 @@ To run your own instance of Pandora, you will need some extra files in the proje
 
 ### Files
 
-`src/env` with
+`src/.env` with
 ```
 DISCORD_TOKEN=[Discord token here]
 ```
@@ -80,6 +80,8 @@ Then run `run.sh`
 chmod +x run.sh
 ./run.sh
 ```
+
+Remember that Pandora will run in a detached screen. To re-attach, `$ screen -r pandora`. To detach, `Ctrl+A, Ctrl+D`.
 
 
 Alternatively, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora. Please note that the docker image is not thoroughly tested and may contain bugs.
