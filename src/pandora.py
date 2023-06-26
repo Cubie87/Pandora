@@ -187,7 +187,7 @@ async def roll(ctx, *, diceString):
 # join a voice channel
 @client.command(aliases=['j'])
 async def join(ctx):
-    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " added the bot to a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.ID))
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " added the bot to a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.id))
     # runs a pre-join check to see if the message is valid
     channel = audioTools.preJoinCheck(ctx)
     # if the user is not in a channel, then channel = 0, and there will be an error message
@@ -202,7 +202,7 @@ async def join(ctx):
 # disconnect from voice in relevant server
 @client.command(aliases=['dc'])
 async def leave(ctx):
-    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " disconnected the bot from a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.ID))
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " disconnected the bot from a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.id))
     try:
         await ctx.voice_client.disconnect()
     except: # if we're not voice connected, let them know!
