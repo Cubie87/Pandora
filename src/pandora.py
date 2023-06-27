@@ -69,6 +69,8 @@ ytdlOps = {
 }
 
 
+
+
 # defines permissions
 intents = discord.Intents.default()
 intents.guilds = True
@@ -136,7 +138,7 @@ async def on_message(message):
         
     # make people lose the game.
     if any(int(users) == message.author.id for users in botVars.gamePlayer):
-        if random.randint(0, 250) == 128: # 1 in 250 chance.
+        if random.randint(0, 25) == 12: # 1 in 25 chance.
             await message.channel.send("<@" + message.author.id + "> just lost the game.")
     
     # furry reply
