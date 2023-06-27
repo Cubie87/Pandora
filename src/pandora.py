@@ -15,6 +15,7 @@ import os # reading .env file
 # utility libraries
 import yt_dlp
 import re # regex
+import random # for pseudo rng for the game. Not used for dice rolls
 from datetime import datetime
 
 # custom libraries
@@ -120,10 +121,7 @@ async def on_message(message):
     # don't respond to self
     if message.author == client.user:
         return
-    # don't respond to blocked users.
-    if any(int(users) == message.author.id for users in botVars.blocklist): 
-        return
-    
+
     # don't respond to DMs
     if isinstance(message.channel, discord.channel.DMChannel):
         return
@@ -131,6 +129,15 @@ async def on_message(message):
     # don't respond to threads
     if isinstance(message.channel, discord.channel.Thread):
         return
+        
+    # don't respond to blocked users.
+    if any(int(users) == message.author.id for users in botVars.blocklist): 
+        return
+        
+    # make people lose the game.
+    if any(int(users) == message.author.id for users in botVars.gamePlayer):
+        if random.randint(0, 250) == 128: # 1 in 250 chance.
+            await message.channel.send("<@" + message.author.id + "> just lost the game.")
     
     # furry reply
     if message.content.lower().startswith(("uwu","owo")):

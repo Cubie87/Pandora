@@ -48,7 +48,11 @@ class botVars:
     prefix = [prefix]
     owner = [numerical Discord ID]
     blocklist = [list of numerical Discord ID] # can be empty list
+    gamePlayer = [list of numerical Discord ID] # can be empty list
 ```
+
+`gamePlayer` are for users that play "the game" (you just lost the game)
+
 The prefix should be a single character used as the prefix for bot commands.
 
 Remove the rsp command, along with the metro command
