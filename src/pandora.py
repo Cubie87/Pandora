@@ -16,7 +16,6 @@ import os # reading .env file
 import yt_dlp
 import re # regex
 import random # for pseudo rng for the game. Not used for dice rolls
-from datetime import datetime
 
 # custom libraries
 from variables import botVars
