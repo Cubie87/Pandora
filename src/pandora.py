@@ -16,12 +16,14 @@ import os # reading .env file
 import yt_dlp
 import re # regex
 import random # for pseudo rng for the game. Not used for dice rolls
+from datetime import datetime
 
 # custom libraries
 from variables import botVars
 import diceRoller 
 import audioTools
 import ctfTime
+import twitter
 
 
 # chatbot fun things
@@ -486,6 +488,46 @@ async def rsp(ctx):
     if ctx.guild.id == botVars.rspServer:
         reply = botVars.rspPrompt
         await ctx.send(reply)
+
+
+
+
+
+#
+#
+## Metro Tweets 
+#
+#
+
+
+
+
+
+
+# send a brief summary of metro status
+@client.command()
+async def metro(ctx):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved metro information.")
+    async with ctx.typing():
+        # get current day of the week
+        rightNow = int(datetime.now().timestamp())
+        # retrieve tweets
+        userTweets = twitter.retrieveUserTweets(botVars.twtapiurl, botVars.twtusr, botVars.twtapiKey, botVars.twtapiHost)
+        # find useful tweets
+        for tweet in userTweets:
+            # get post timestamp as a unix epoch
+            unixpost = int(datetime.strptime(str(tweet['content']['content']['tweetResult']['result']['legacy']['created_at']), '%a %b %d %H:%M:%S %z %Y').timestamp())
+            # break if not sent in the past 24 hours
+            if unixpost < rightNow - 86400:
+                break
+            # otherwise retrieve text
+            tweetText = tweet['content']['content']['tweetResult']['result']['legacy']['full_text']
+            # only send if tweet text matches metroRegex
+            if re.search(botVars.metroRegex, tweetText):
+                await ctx.send(embed = discord.Embed(title = "<t:" + str(unixpost) + ":F>", description = tweetText, color = 0xFFFFFF))
+    await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
+
+
 
 
 
