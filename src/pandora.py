@@ -23,7 +23,7 @@ from variables import botVars
 import diceRoller 
 import audioTools
 import ctfTime
-import twitter
+from metro import retrieveEvents
 
 
 # chatbot fun things
@@ -511,20 +511,20 @@ async def metro(ctx):
     async with ctx.typing():
         # get current day of the week
         rightNow = int(datetime.now().timestamp())
-        # retrieve tweets
-        userTweets = twitter.retrieveUserTweets(botVars.twtapiurl, botVars.twtusr, botVars.twtapiKey, botVars.twtapiHost)
-        # find useful tweets
-        for tweet in userTweets:
+        # retrieve events
+        eventList = retrieveEvents(botVars.metroapiurl)
+        # find useful events
+        for item in eventList['entries']:
             # get post timestamp as a unix epoch
-            unixpost = int(datetime.strptime(str(tweet['content']['content']['tweetResult']['result']['legacy']['created_at']), '%a %b %d %H:%M:%S %z %Y').timestamp())
+            unixpost = int(datetime.strptime(str(item['published']), '%a, %d %b %Y %H:%M:%S %z').timestamp())
             # break if not sent in the past 24 hours
             if unixpost < rightNow - 86400:
                 break
             # otherwise retrieve text
-            tweetText = tweet['content']['content']['tweetResult']['result']['legacy']['full_text']
-            # only send if tweet text matches metroRegex
-            if re.search(botVars.metroRegex, tweetText):
-                await ctx.send(embed = discord.Embed(title = "<t:" + str(unixpost) + ":F>", description = tweetText, color = 0xFFFFFF))
+            itemText = item['title'] + "\n\n" + item['link']
+            # only send if item text matches metroRegex
+            # if re.search(botVars.metroRegex, itemText):
+            await ctx.send(embed = discord.Embed(title = "<t:" + str(unixpost) + ":F>", description = itemText, color = 0xFFFFFF))
     await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
 
 
