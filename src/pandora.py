@@ -515,16 +515,17 @@ async def metro(ctx):
         userTweets = retrieveUserTweets(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
         # find useful tweets
         for tweet in userTweets:
+            print(tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['full_text'])
             # get post timestamp as a unix epoch
             try:
-                unixpost = int(datetime.strptime(str(tweet['content']['content']['tweetResult']['result']['legacy']['created_at']), '%a %b %d %H:%M:%S %z %Y').timestamp())
+                unixpost = int(datetime.strptime(str(tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['created_at']), '%a %b %d %H:%M:%S %z %Y').timestamp())
             except:
-                break
+                continue
             # break if not sent in the past 24 hours
             if unixpost < rightNow - 86400:
                 break
             # otherwise retrieve text
-            tweetText = tweet['content']['content']['tweetResult']['result']['legacy']['full_text']
+            tweetText = tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['full_text']
             # only send if tweet text matches metroRegex
             #if re.search(botVars.metroRegex, tweetText):
             await ctx.send(embed = discord.Embed(title = "<t:" + str(unixpost) + ":F>", description = tweetText, color = 0xFFFFFF))
