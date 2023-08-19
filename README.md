@@ -5,6 +5,7 @@ A custom discord bot :D
  - Expanded to be able to cache and play YouTube audio (using yt-dlp)
  - Can grab video's audio for on the go listening (eg, on the bus), allowing for phone to be locked
     - This bypasses YouTube's paid feature where you can turn your screen off and still listen
+    - Note no song queueing (yet. Maybe future feature???)
  - Has a ChatGPT interface (gpt-3.5-turbo)
 
 
@@ -31,6 +32,8 @@ Bail allows the bot to be removed from a server without the owner being part of 
 
 All audio played is cached in `./media/` as mp3 files and can be deleted occasionally.
 
+Other misc commands not covered here are "easter eggs" and can be found by looking in the source code (not too difficult)
+
 
 ## Setup
 To run your own instance of Pandora, you will need some extra files in the project's `src/` directory.
@@ -55,7 +58,7 @@ class botVars:
 
 The prefix should be a single character used as the prefix for bot commands.
 
-Remove the rsp command, along with the metro command
+Remove the `rsp` command, along with the `metro` command and the `ctf` commands
 
 Then, install dependences 
 
@@ -90,4 +93,4 @@ Remember that Pandora will run in a detached screen. To re-attach, `$ screen -r 
 
 Alternatively, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora. Please note that the docker image is not thoroughly tested and may contain bugs.
 
-Generate a discord bot invite URL on the applications page and invite to a server. 
+Generate a discord bot invite URL on the applications page of the developer portal and invite to a server. 

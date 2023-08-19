@@ -14,7 +14,6 @@ import os # reading .env file
 
 # utility libraries
 import yt_dlp
-import re # regex
 import random # for pseudo rng for the game. Not used for dice rolls
 from datetime import datetime
 
@@ -24,7 +23,6 @@ import diceRoller
 import audioTools
 import ctfTime
 from metro import retrieveUserTweets
-
 
 # chatbot fun things
 import openai
@@ -526,9 +524,9 @@ async def metro(ctx):
                 break
             # otherwise retrieve text
             tweetText = tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['full_text']
-            # only send if tweet text matches metroRegex
-            #if re.search(botVars.metroRegex, tweetText):
+            # and send text in reply to the discord query.
             await ctx.send(embed = discord.Embed(title = "<t:" + str(unixpost) + ":F>", description = tweetText, color = 0xFFFFFF))
+    # announce processing is finished (or that there is no items of note)
     await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
 
 
