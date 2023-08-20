@@ -513,7 +513,6 @@ async def metro(ctx):
         userTweets = retrieveUserTweets(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
         # find useful tweets
         for tweet in userTweets:
-            print(tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['full_text'])
             # get post timestamp as a unix epoch
             try:
                 unixpost = int(datetime.strptime(str(tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['created_at']), '%a %b %d %H:%M:%S %z %Y').timestamp())

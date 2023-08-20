@@ -1,6 +1,4 @@
-#import feedparser
 import requests
-import re
 
 #def retrieveEvents(metroAPIurl):
 #    return feedparser.parse("https://www.adelaidemetro.com.au/announcements/rss")
