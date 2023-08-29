@@ -511,6 +511,7 @@ async def metro(ctx):
         rightNow = int(datetime.now().timestamp())
         # retrieve tweets
         userTweets = retrieveUserTweets(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
+        print(userTweets)
         # find useful tweets
         for tweet in userTweets:
             # get post timestamp as a unix epoch
@@ -518,8 +519,8 @@ async def metro(ctx):
                 unixpost = int(datetime.strptime(str(tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['created_at']), '%a %b %d %H:%M:%S %z %Y').timestamp())
             except:
                 continue
-            # break if not sent in the past 24 hours
-            if unixpost < rightNow - 86400:
+            # break if not sent in the past 72 hours
+            if unixpost < rightNow - 259200:
                 break
             # otherwise retrieve text
             tweetText = tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['full_text']
