@@ -512,6 +512,10 @@ async def metro(ctx):
         # retrieve tweets
         userTweets = retrieveUserTweets(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
         print(userTweets)
+        # if API has error
+        if userTweets == "API error":
+            await ctx.send(embed = discord.Embed(title = "API Error!", description = "Apologies! Please bug the owner about this.", color = 0xFFFFFF))
+            return
         # find useful tweets
         for tweet in userTweets:
             # get post timestamp as a unix epoch

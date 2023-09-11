@@ -12,7 +12,12 @@ def retrieveUserTweets(twitterAPIurl, twitterUser, twitterAPIkey, twitterAPIhost
         "X-RapidAPI-Host": twitterAPIhost
     }
     response = requests.get(twitterAPIurl, headers=headers, params=querystring)
+    # check if the API has issues. 
+    try:
+        information = response.json()
+        information = information['data']['user_result']['result']['timeline_response']['timeline']['instructions'][1]['entries']
+        return information
+    except:
+        return "API error"
 
-    information = response.json()
-
-    return information['data']['user_result']['result']['timeline_response']['timeline']['instructions'][1]['entries']
+    
