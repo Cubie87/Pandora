@@ -1,23 +1,10 @@
-import requests
-
-#def retrieveEvents(metroAPIurl):
-#    return feedparser.parse("https://www.adelaidemetro.com.au/announcements/rss")
+import feedparser
 
 
-
-def retrieveUserTweets(twitterAPIurl, twitterUser, twitterAPIkey, twitterAPIhost):
-    querystring = {"username":twitterUser}
-    headers = {
-        "X-RapidAPI-Key": twitterAPIkey,
-        "X-RapidAPI-Host": twitterAPIhost
-    }
-    response = requests.get(twitterAPIurl, headers=headers, params=querystring)
-    # check if the API has issues. 
-    try:
-        information = response.json()
-        information = information['data']['user_result']['result']['timeline_response']['timeline']['instructions'][1]['entries']
-        return information
-    except:
-        return "API error"
+def retrieveUserTweets(apiURL):
+    # set browser agent
+    feedparser.USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
+    # grab RSS feed
+    return feedparser.parse(apiURL)
 
     

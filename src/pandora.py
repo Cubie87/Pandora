@@ -510,24 +510,17 @@ async def metro(ctx):
         # get current day of the week
         rightNow = int(datetime.now().timestamp())
         # retrieve tweets
-        userTweets = retrieveUserTweets(botVars.twtapiurl, botVars.twtusr, botVars.apikey, botVars.apihost)
-        print(userTweets)
-        # if API has error
-        if userTweets == "API error":
-            await ctx.send(embed = discord.Embed(title = "API Error!", description = "Apologies! Please bug the owner about this.", color = 0xFFFFFF))
-            return
+        userTweets = retrieveUserTweets(botVars.twtapiurl)
+        print(len(userTweets['entries']))
         # find useful tweets
-        for tweet in userTweets:
+        for tweet in userTweets['entries']:
             # get post timestamp as a unix epoch
-            try:
-                unixpost = int(datetime.strptime(str(tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['created_at']), '%a %b %d %H:%M:%S %z %Y').timestamp())
-            except:
-                continue
+            unixpost = int(datetime.strptime(str(tweet['published']), '%a, %d %b %Y %H:%M:%S %Z').timestamp())
             # break if not sent in the past 72 hours
             if unixpost < rightNow - 259200:
                 break
             # otherwise retrieve text
-            tweetText = tweet['content']['items'][0]['item']['content']['tweetResult']['result']['legacy']['full_text']
+            tweetText = tweet['title_detail']['value']
             # and send text in reply to the discord query.
             await ctx.send(embed = discord.Embed(title = "<t:" + str(unixpost) + ":F>", description = tweetText, color = 0xFFFFFF))
     # announce processing is finished (or that there is no items of note)
