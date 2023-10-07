@@ -511,7 +511,6 @@ async def metro(ctx):
         rightNow = int(datetime.now().timestamp())
         # retrieve tweets
         userTweets = retrieveUserTweets(botVars.twtapiurl)
-        print(len(userTweets['entries']))
         # find useful tweets
         for tweet in userTweets['entries']:
             # get post timestamp as a unix epoch
