@@ -14,6 +14,7 @@ Use `help` (with prefix) to see commands in Discord.
 
  - `help`: shows this command
  - `ping`: ping the bot
+ - `events`: send upcoming server events as `.ics` file
  - `roll` (or `r`): roll some dice
  - `join`: join the voice channel you're currently in
  - `leave` (or `dc`): leave the connected voice channel in the server

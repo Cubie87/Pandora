@@ -10,16 +10,16 @@ def castDiscordTimeToZulu(timeObject):
 
 
 
-def makeVevent(event, icalFile):
-    icalFile.write("BEGIN:VEVENT\n")
-    icalFile.write("UID:" + str(datetime.now().timestamp()) + "\n")
-    icalFile.write("DTSTAMP:" + datetime.now().strftime('%Y%m%dT%H%M%SZ') + "\n")
-    icalFile.write("DTSTART:" + castDiscordTimeToZulu(event.start_time) + "\n")
-    icalFile.write("DTEND:" + castDiscordTimeToZulu(event.end_time) + "\n")
-    icalFile.write("SUMMARY:" + event.name + "\n")
-    icalFile.write("LOCATION:" + event.location + "\n")
-    icalFile.write("DESCRIPTION:" + event.description + "\n")
-    icalFile.write("END:VEVENT\n")
+def makeVevent(event, icsFile):
+    icsFile.write("BEGIN:VEVENT\n")
+    icsFile.write("UID:" + str(datetime.now().timestamp()) + "\n")
+    icsFile.write("DTSTAMP:" + datetime.now().strftime('%Y%m%dT%H%M%SZ') + "\n")
+    icsFile.write("DTSTART:" + castDiscordTimeToZulu(event.start_time) + "\n")
+    icsFile.write("DTEND:" + castDiscordTimeToZulu(event.end_time) + "\n")
+    icsFile.write("SUMMARY:" + event.name + "\n")
+    icsFile.write("LOCATION:" + event.location + "\n")
+    icsFile.write("DESCRIPTION:" + event.description + "\n")
+    icsFile.write("END:VEVENT\n")
 
 
 

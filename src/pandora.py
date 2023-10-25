@@ -56,6 +56,9 @@ media = media[:-1]
 # define the furry reply (to owo and derivatives)
 furryReply = "Hewwo uwu?"
 
+# ics header
+icsHeader = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:https://github.com/Cubie87/Pandora\n"
+
 # yt-dlp options
 ytdlOps = {
     'format': 'mp3/bestaudio/best',
@@ -193,15 +196,15 @@ async def events(ctx):
             await ctx.send(embed = discord.Embed(title = "No events found", color = 0x888888))
             return
         # opens an ical file for writing
-        icalFile = open("ical.ics", "w")
+        icsFile = open("ical.ics", "w")
         # writes header
-        icalFile.write(botVars.icalHeader)
+        icsFile.write(icsHeader)
         # enumerates all events and writes properties to ical file
         for event in eventList:
-            ical.makeVevent(event, icalFile)
+            ical.makeVevent(event, icsFile)
         # write footer and close file
-        icalFile.write("END:VCALENDAR\n")
-        icalFile.close()
+        icsFile.write("END:VCALENDAR\n")
+        icsFile.close()
         # load file and send
         file = discord.File("ical.ics")
         await ctx.send(file=file)
