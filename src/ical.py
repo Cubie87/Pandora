@@ -13,9 +13,9 @@ def makeVevent(event, icalFile):
     icalFile.write("BEGIN:VEVENT\n")
     icalFile.write("DTSTART:" + castDiscordTimeToZulu(event.start_time) + "\n")
     icalFile.write("DTEND:" + castDiscordTimeToZulu(event.end_time) + "\n")
-    icalFile.write("SUMMARY:" + event.name)
-    icalFile.write("LOCATION:" + event.location)
-    icalFile.write("DESCRIPTION:" + event.description)
+    icalFile.write("SUMMARY:" + event.name + "\n")
+    icalFile.write("LOCATION:" + event.location + "\n")
+    icalFile.write("DESCRIPTION:" + event.description + "\n")
     icalFile.write("END:VEVENT\n")
 
 

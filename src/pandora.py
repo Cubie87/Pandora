@@ -189,7 +189,7 @@ async def events(ctx):
         eventList = await ctx.guild.fetch_scheduled_events()
         print(eventList) # print testing
         # opens an ical file for writing
-        icalFile = open("ical.ical", "w")
+        icalFile = open("ical.ics", "w")
         # writes header
         icalFile.write(botVars.icalHeader)
         # enumerates all events and writes properties to ical file
@@ -199,10 +199,10 @@ async def events(ctx):
         icalFile.write("END:VCALENDAR\n")
         icalFile.close()
         # load file and send
-        file = discord.File("ical.ical")
+        file = discord.File("ical.ics")
         await ctx.send(file=file)
     # delete file.
-    os.remove("ical.ical")
+    os.remove("ical.ics")
 
 
 #
