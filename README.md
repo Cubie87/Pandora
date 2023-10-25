@@ -78,7 +78,7 @@ sudo apt install python-is-python3 python3-pip ffmpeg
 
 Install python dependencies
 ```bash
-pip install discord.py python-dotenv numpy yt-dlp openai feedparser
+pip install discord.py python-dotenv numpy yt-dlp openai feedparser datetime
 pip install -U discord.py[voice]
 ```
 

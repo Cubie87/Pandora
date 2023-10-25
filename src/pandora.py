@@ -22,6 +22,7 @@ from variables import botVars
 import diceRoller 
 import audioTools
 import ctfTime
+import ical
 from metro import retrieveUserTweets
 
 # chatbot fun things
@@ -187,13 +188,20 @@ async def events(ctx):
         #` grab all events in server
         eventList = await ctx.guild.fetch_scheduled_events()
         print(eventList) # print testing
+        # opens an ical file for writing
         icalFile = open("ical.ical", "w")
+        # writes header
         icalFile.write(botVars.icalHeader)
+        # enumerates all events and writes properties to ical file
         for event in eventList:
-            makeVevent(event, icalFile)
+            ical.makeVevent(event, icalFile)
+        # write footer and close file
         icalFile.write("END:VCALENDAR\n")
         icalFile.close()
-    await ctx.send(file="ical.ical")
+        # load file and send
+        file = discord.File("ical.ical")
+        await ctx.send(file=file)
+    # delete file.
     os.remove("ical.ical")
 
 
