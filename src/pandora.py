@@ -188,6 +188,10 @@ async def events(ctx):
         #` grab all events in server
         eventList = await ctx.guild.fetch_scheduled_events()
         print(eventList) # print testing
+        # case if no events are present
+        if len(eventList) == 0:
+            await ctx.send(embed = discord.Embed(title = "No events found", color = 0x888888))
+            return
         # opens an ical file for writing
         icalFile = open("ical.ics", "w")
         # writes header
