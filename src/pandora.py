@@ -180,7 +180,21 @@ async def roll(ctx, *, diceString):
     reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
 
-
+# get calendar event and send as .ical file
+@client.command()
+async def events(ctx):
+    async with ctx.typing():
+        #` grab all events in server
+        eventList = await ctx.guild.fetch_scheduled_events()
+        print(eventList) # print testing
+        icalFile = open("ical.ical", "w")
+        icalFile.write(botVars.icalHeader)
+        for event in eventList:
+            makeVevent(event, icalFile)
+        icalFile.write("END:VCALENDAR\n")
+        icalFile.close()
+    await ctx.send(file="ical.ical")
+    os.remove("ical.ical")
 
 
 #
