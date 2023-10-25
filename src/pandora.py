@@ -205,7 +205,7 @@ async def events(ctx):
         # load file and send
         file = discord.File("ical.ics")
         await ctx.send(file=file)
-    # delete file.
+    # delete file
     os.remove("ical.ics")
 
 
@@ -533,7 +533,7 @@ async def rsp(ctx):
 async def metro(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved metro information.")
     async with ctx.typing():
-        # get current day of the week
+        # get current time in unix epoch int
         rightNow = int(datetime.now().timestamp())
         # retrieve tweets
         userTweets = retrieveUserTweets(botVars.twtapiurl)
