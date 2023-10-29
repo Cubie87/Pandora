@@ -24,7 +24,6 @@ def makeVevent(event, icsFile):
     icsFile.write("LOCATION:" + event.location + "\n")
     icsFile.write("DESCRIPTION:" + event.description + "\n")
     icsFile.write("END:VEVENT\n")
-    return
 
 
 # get all events, format them to ics format and send as file.
@@ -48,6 +47,5 @@ async def getEvents(ctx, icsFileName):
     # load file and send
     file = discord.File(icsFileName)
     await ctx.send(file=file)
-    return
 
 

@@ -71,7 +71,6 @@ async def joinVoice(ctx):
     # otherwise, channel is the voice channel that the user is currently connected to.
     await channel.connect()
     await ctx.message.add_reaction("👍")
-    return
 
 
 async def leaveVoice(ctx):
@@ -81,7 +80,6 @@ async def leaveVoice(ctx):
         await ctx.send(embed = discord.Embed(title = "Error!", description = "I'm not in a voice channel here!", color = 0x880000))
     else: #
         await ctx.message.add_reaction("👍")
-    return
 
 
 async def playMusic(ctx, link, mediaDir, client):

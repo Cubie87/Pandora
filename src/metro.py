@@ -33,4 +33,3 @@ async def metroTweets(ctx, apiURL):
         tweetText = tweet['title_detail']['value']
         # and send text in reply to the discord query.
         await ctx.send(embed = discord.Embed(title = "<t:" + str(unixpost) + ":F>", description = tweetText, color = 0xFFFFFF))
-    return
