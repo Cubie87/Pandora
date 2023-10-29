@@ -1,7 +1,8 @@
 # Pandora
 A custom discord bot :D
 
- - Originally written to roll dice.
+ - Originally written to roll dice
+ - Export discord events to calendar function
  - Expanded to be able to cache and play YouTube audio (using yt-dlp)
  - Can grab video's audio for on the go listening (eg, on the bus), allowing for phone to be locked
     - This bypasses YouTube's paid feature where you can turn your screen off and still listen
@@ -29,7 +30,6 @@ The bot owner is also able to use the following commands:
  - `sleep`: shut down the bot
 
 Bail allows the bot to be removed from a server without the owner being part of said server.
-
 
 All audio played is cached in `./media/` as mp3 files and can be deleted occasionally.
 
@@ -59,7 +59,7 @@ class botVars:
 
 The prefix should be a single character used as the prefix for bot commands.
 
-Remove the `rsp` command, along with the `metro` command and the `ctf` commands
+Remove the `rsp` command, along with the `metro` command.
 
 Then, install dependences 
 
@@ -79,7 +79,7 @@ sudo apt install python-is-python3 python3-pip ffmpeg
 
 Install python dependencies
 ```bash
-pip install discord.py python-dotenv numpy yt-dlp openai feedparser datetime
+pip install discord.py python-dotenv numpy yt-dlp openai feedparser
 pip install -U discord.py[voice]
 ```
 
@@ -90,6 +90,8 @@ chmod +x run.sh
 ```
 
 Remember that Pandora will run in a detached screen. To re-attach, `$ screen -r pandora`. To detach, `Ctrl+A, Ctrl+D`.
+
+You may used other programs such as tmux for the same functionality, remember to edit `src/run.sh` in that case.
 
 
 Alternatively, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora. Please note that the docker image is not thoroughly tested and may contain bugs.

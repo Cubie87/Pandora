@@ -1,11 +1,12 @@
-# a  custom toolkit to grab CTFtime entries from the website 
+# a custom toolkit to grab CTFtime entries from the website 
 # and post the event details into the discord server.
 
 # note that this abides by their API guidelines, which is re-stated below.
 
 #API for simple data export. Data is in JSON format.
 #This API is provided for data analysis and mobile applications only.
-#You can not use this API to run CTFtime clones — most of the CTFtime data is moderated by humans, please, respect their time.
+#You can not use this API to run CTFtime clones — most of the CTFtime data
+#is moderated by humans, please, respect their time.
 
 # More information can be found at https://ctftime.org/api/
 
@@ -15,6 +16,7 @@ import urllib.request
 import feedparser
 import re # regex
 from datetime import datetime
+
 
 # build the reply card from json format.
 def buildReplyJson(eventJson):
@@ -69,8 +71,6 @@ def grabCtfDetails(code):
     reply = buildReplyJson(eventJson)
     # send reply
     return str(eventJson['title']), reply
-
-
 
 
 # grab all current ongoing CTFs

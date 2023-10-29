@@ -118,6 +118,7 @@ async def playMusic(ctx, link, mediaDir, client):
     voiceChannel.play(discord.FFmpegPCMAudio(mediaDir + link + ".mp3"))
     await ctx.message.add_reaction("➡")
 
+
 # there's opportunity to merge a lot of the below with playMusic().
 async def grabMusic(ctx, link, mediaDir, client):
     # check for invalid links    

@@ -265,8 +265,6 @@ async def stop(ctx):
     await ctx.message.add_reaction("👍")
 
 
-
-
 # download and send some audio
 @client.command()
 async def grab(ctx, *, link):

@@ -10,7 +10,7 @@ RUN apt-get install python-is-python3 python3-pip ffmpeg -y
 
 # install python dependencies
 RUN pip install --upgrade pip
-RUN pip install discord.py python-dotenv numpy yt-dlp feedparser
+RUN pip install discord.py python-dotenv numpy yt-dlp openai feedparser
 RUN pip install -U discord.py[voice]
 #openai
 RUN pip install openai
