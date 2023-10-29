@@ -56,8 +56,10 @@ media = media[:-1]
 # define the furry reply (to owo and derivatives)
 furryReply = "Hewwo uwu?"
 
-# ics header
-icsHeader = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:https://github.com/Cubie87/Pandora\n"
+# ics filename
+icsFileName = "events.ics"
+
+
 
 # yt-dlp options
 ytdlOps = {
@@ -165,6 +167,7 @@ async def on_message(message):
 async def ping(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " pinged the bot.")
     await ctx.send(embed = discord.Embed(title = "Pong!", color = 0x0078ff))
+    return
 
 
 # help command
@@ -175,6 +178,7 @@ async def help(ctx):
     helpContent = file.read()
     file.close()
     await ctx.send(embed = discord.Embed(title = "Pandora's commands", description = helpContent, color = 0x0078ff))
+    return
 
 
 # roll some dice!
@@ -183,33 +187,18 @@ async def roll(ctx, *, diceString):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
     reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
+    return
+
 
 # get calendar event and send as .ical file
 @client.command()
 async def events(ctx):
     async with ctx.typing():
-        #` grab all events in server
-        eventList = await ctx.guild.fetch_scheduled_events()
-        print(eventList) # print testing
-        # case if no events are present
-        if len(eventList) == 0:
-            await ctx.send(embed = discord.Embed(title = "No events found", color = 0x888888))
-            return
-        # opens an ical file for writing
-        icsFile = open("ical.ics", "w")
-        # writes header
-        icsFile.write(icsHeader)
-        # enumerates all events and writes properties to ical file
-        for event in eventList:
-            ical.makeVevent(event, icsFile)
-        # write footer and close file
-        icsFile.write("END:VCALENDAR\n")
-        icsFile.close()
-        # load file and send
-        file = discord.File("ical.ics")
-        await ctx.send(file=file)
+        # make event and send file
+        await ical.getEvents(ctx, icsFileName)
     # delete file
-    os.remove("ical.ics")
+    os.remove(icsFileName)
+    return
 
 
 #
