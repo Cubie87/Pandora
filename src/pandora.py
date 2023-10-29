@@ -14,7 +14,6 @@ import os # reading local files
 
 # utility libraries
 import random # for pseudo rng for the game. Not used for dice rolls
-from datetime import datetime
 
 # custom libraries
 from variables import botVars
@@ -22,7 +21,7 @@ import diceRoller
 import audioTools
 import ctfTime
 import ical
-from metro import retrieveUserTweets
+from metro import metroTweets
 
 # chatbot fun things
 import openai
@@ -106,10 +105,6 @@ async def on_ready(): # do this on startup
 #
 
 
-
-
-
-
 # any normal text commands. This is run first before any of the @client.commands() commands
 @client.event
 async def on_message(message):
@@ -147,8 +142,6 @@ async def on_message(message):
 
     # continue processing bot commands
     await client.process_commands(message)
-
-
 
 
 # ping the bot! The most basic command.
@@ -194,13 +187,11 @@ async def events(ctx):
 
 
 
-
+#
 #
 ## Audio Tools! (and music playing :D)
 #
-
-
-
+#
 
 
 # join a voice channel
@@ -325,8 +316,6 @@ async def grab(ctx, *, link):
 # CTF Time functions
 #
 #
-
-
 
 
 # send some brief details about a CTFtime entry
@@ -468,30 +457,12 @@ async def rsp(ctx):
 #
 
 
-
-
-
-
 # send a brief summary of metro status
 @client.command()
 async def metro(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved metro information.")
     async with ctx.typing():
-        # get current time in unix epoch int
-        rightNow = int(datetime.now().timestamp())
-        # retrieve tweets
-        userTweets = retrieveUserTweets(botVars.twtapiurl)
-        # find useful tweets
-        for tweet in userTweets['entries']:
-            # get post timestamp as a unix epoch
-            unixpost = int(datetime.strptime(str(tweet['published']), '%a, %d %b %Y %H:%M:%S %Z').timestamp())
-            # break if not sent in the past 72 hours
-            if unixpost < rightNow - 259200:
-                break
-            # otherwise retrieve text
-            tweetText = tweet['title_detail']['value']
-            # and send text in reply to the discord query.
-            await ctx.send(embed = discord.Embed(title = "<t:" + str(unixpost) + ":F>", description = tweetText, color = 0xFFFFFF))
+        await metroTweets(ctx, botVars.twtapiurl)
     # announce processing is finished (or that there is no items of note)
     await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
 
