@@ -12,7 +12,6 @@ def preJoinCheck(ctx):
     return ctx.message.author.voice.channel
 
 
-
 def getVoiceChannel(ctx, bot):
     if bot.voice_clients == []:
         return -1
@@ -26,18 +25,26 @@ def getVoiceChannel(ctx, bot):
     return -1
 
 
-
 def checkInvalidLink(link):
     # finds the second spacebar in message
     a = link.find(" ")
     if a != -1:
         link = link[:a]
-        # delete all text after the spacebar
-
+        # delete all text after the second spacebar
     # Check for attack/illegal characters in link.
     if not re.search("^[a-zA-Z0-9_-]{11}$", link): # regex expression for a valid youtube video id.
         return True
-    
     return False
 
-    
+
+async def joinVoice(ctx):
+    # runs a pre-join check to see if the message is valid
+    channel = preJoinCheck(ctx)
+    # if the user is not in a channel, then channel = 0, and there will be an error message
+    if channel == 0:
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please join a voice channel first!", color = 0x880000))
+        return
+    # otherwise, channel is the voice channel that the user is currently connected to.
+    await channel.connect()
+    await ctx.message.add_reaction("👍")
+    return

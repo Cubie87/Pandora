@@ -193,12 +193,17 @@ async def roll(ctx, *, diceString):
 # get calendar event and send as .ical file
 @client.command()
 async def events(ctx):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Pulled events list.")
     async with ctx.typing():
         # make event and send file
         await ical.getEvents(ctx, icsFileName)
     # delete file
     os.remove(icsFileName)
     return
+
+
+
+
 
 
 #
@@ -213,15 +218,8 @@ async def events(ctx):
 @client.command(aliases=['j'])
 async def join(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " added the bot to a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.id))
-    # runs a pre-join check to see if the message is valid
-    channel = audioTools.preJoinCheck(ctx)
-    # if the user is not in a channel, then channel = 0, and there will be an error message
-    if channel == 0:
-        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please join a voice channel first!", color = 0x880000))
-        return
-    # otherwise, channel is the voice channel that the user is currently connected to.
-    await channel.connect()
-    await ctx.message.add_reaction("👍")
+    await audioTools.joinVoice(ctx)
+    return
 
 
 # disconnect from voice in relevant server
