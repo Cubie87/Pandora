@@ -121,6 +121,8 @@ async def on_ready(): # do this on startup
 
 
 
+
+
 # any normal text commands. This is run first before any of the @client.commands() commands
 @client.event
 async def on_message(message):
@@ -193,7 +195,7 @@ async def roll(ctx, *, diceString):
 # get calendar event and send as .ical file
 @client.command()
 async def events(ctx):
-    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Pulled events list.")
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Pulled events list from " + str(ctx.guild.name) + ", " + str(ctx.guild.id))
     async with ctx.typing():
         # make event and send file
         await ical.getEvents(ctx, icsFileName)
@@ -226,12 +228,8 @@ async def join(ctx):
 @client.command(aliases=['dc'])
 async def leave(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " disconnected the bot from a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.id))
-    try:
-        await ctx.voice_client.disconnect()
-    except: # if we're not voice connected, let them know!
-        await ctx.send(embed = discord.Embed(title = "Error!", description = "I'm not in a voice channel here!", color = 0x880000))
-    else:
-        await ctx.message.add_reaction("👍")
+    await audioTools.leaveVoice(ctx)
+    return
 
 
 # bot autodisconnects if the last person in a vc leaves
@@ -241,7 +239,6 @@ async def on_voice_state_update(member, before, after):
     if voice_state is None:
         # Exiting if the bot it's not connected to a voice channel
         return 
-
     if len(voice_state.channel.members) == 1:
         # Exiting if the bot is the only one connected to this voice channel
         await voice_state.disconnect()

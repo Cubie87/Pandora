@@ -48,3 +48,13 @@ async def joinVoice(ctx):
     await channel.connect()
     await ctx.message.add_reaction("👍")
     return
+
+
+async def leaveVoice(ctx):
+    try: # try disconnect
+        await ctx.voice_client.disconnect()
+    except: # if we're not voice connected, let them know!
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "I'm not in a voice channel here!", color = 0x880000))
+    else: #
+        await ctx.message.add_reaction("👍")
+    return
