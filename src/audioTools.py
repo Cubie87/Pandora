@@ -117,3 +117,29 @@ async def playMusic(ctx, link, mediaDir, client):
     # play the audio
     voiceChannel.play(discord.FFmpegPCMAudio(mediaDir + link + ".mp3"))
     await ctx.message.add_reaction("➡")
+
+# there's opportunity to merge a lot of the below with playMusic().
+async def grabMusic(ctx, link, mediaDir, client):
+    # check for invalid links    
+    if checkInvalidLink(link):
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
+        return
+    
+    # if the file does exist, send!
+    if os.path.isfile(mediaDir + link + ".mp3"):
+        try:
+            await ctx.send(file=discord.File(mediaDir + link + ".mp3"))
+        except:
+            await ctx.send(embed = discord.Embed(title = "Error!", description = "File is too large.", color = 0x880000))
+        return
+
+    # the file doesn't exist! Need to download it.
+    async with ctx.typing():
+        with yt_dlp.YoutubeDL(ytdlOps) as ydl:
+            error_code = ydl.download([link])
+
+    # try send the file. If there's an error, it's probably too big
+    try:
+        await ctx.send(file=discord.File(mediaDir + link + ".mp3"))
+    except:
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "File is too large.", color = 0x880000))

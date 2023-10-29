@@ -29,13 +29,13 @@ import openai
 
 
 
+
+
 #
 #
 # Global variable definition
 #
 #
-
-
 
 
 # load token from env file
@@ -160,7 +160,6 @@ async def help(ctx):
     helpContent = file.read()
     file.close()
     await ctx.send(embed = discord.Embed(title = "Pandora's commands", description = helpContent, color = 0x0078ff))
-    return
 
 
 # roll some dice!
@@ -169,7 +168,6 @@ async def roll(ctx, *, diceString):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " Rolled some dice.")
     reply = diceRoller.roll(diceString)
     await ctx.send(embed = reply)
-    return
 
 
 # get calendar event and send as .ical file
@@ -181,7 +179,6 @@ async def events(ctx):
         await ical.getEvents(ctx, icsFileName)
     # delete file
     os.remove(icsFileName)
-    return
 
 
 
@@ -199,7 +196,6 @@ async def events(ctx):
 async def join(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " added the bot to a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.id))
     await audioTools.joinVoice(ctx)
-    return
 
 
 # disconnect from voice in relevant server
@@ -207,7 +203,6 @@ async def join(ctx):
 async def leave(ctx):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " disconnected the bot from a vc in " + str(ctx.guild.name) + ", " + str(ctx.guild.id))
     await audioTools.leaveVoice(ctx)
-    return
 
 
 # bot autodisconnects if the last person in a vc leaves
@@ -220,7 +215,6 @@ async def on_voice_state_update(member, before, after):
     if len(voice_state.channel.members) == 1:
         # Exiting if the bot is the only one connected to this voice channel
         await voice_state.disconnect()
-    return
 
 
 # play some audio
@@ -228,7 +222,6 @@ async def on_voice_state_update(member, before, after):
 async def play(ctx, *, link):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " played some music. " + str(link))
     await audioTools.playMusic(ctx, link, mediaDir, client)
-    return
 
 
 
@@ -278,33 +271,8 @@ async def stop(ctx):
 @client.command()
 async def grab(ctx, *, link):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " grabbed some audio. " + str(link))
-    # check for invalid links    
-    if audioTools.checkInvalidLink(link):
-        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
-        return
-    
-    await ctx.message.add_reaction("👍")
-    # if the file does exist, send!
-    if os.path.isfile(media + link + ".mp3"):
-        try:
-            await ctx.send(file=discord.File(media + link + ".mp3"))
-        except:
-            await ctx.send(embed = discord.Embed(title = "Error!", description = "File is too large.", color = 0x880000))
-        else:
-            await ctx.message.add_reaction("➡")
-        return
-
-    # the file doesn't exist! Need to download it.
     async with ctx.typing():
-        with yt_dlp.YoutubeDL(ytdlOps) as ydl:
-            error_code = ydl.download([link])
-
-    # try send the file. If there's an error, it's probably too big
-    try:
-        await ctx.send(file=discord.File(media + link + ".mp3"))
-    except:
-        await ctx.send(embed = discord.Embed(title = "Error!", description = "File is too large.", color = 0x880000))
-
+        await audioTools.grabMusic(ctx, link, mediaDir, client)
 
 
 
@@ -478,8 +446,6 @@ async def metro(ctx):
 # Everything below is administration commands for the bot, for the owner.
 #
 #
-
-
 
 
 # list all the guilds that the bot is part of
