@@ -15,6 +15,7 @@ import json
 import urllib.request
 import feedparser
 import re # regex
+import discord
 from datetime import datetime
 
 
@@ -83,3 +84,42 @@ def currentCTFs():
 def upcomingCTFs():
     # grab RSS feed
     return feedparser.parse("https://ctftime.org/event/list/upcoming/rss/")
+
+
+
+
+
+async def getCtfTime(ctx, code):
+    if not isCtfCodeValid(code):
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
+        return
+
+    # grab the event details
+    title, reply = grabCtfDetails(code)
+    # errors if the event ID doesn't correspond with an actual ctftime event
+    if not title:
+        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid CTFTime ID.\nEg: `=ctftime 1000`", color = 0x880000))
+        return
+    await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
+
+
+async def getCtfNow(ctx):
+    # grab from RSS feed
+    rssFeed = currentCTFs()
+    for entry in rssFeed['entries']:
+        title, reply = buildReplyRSS(entry)
+        await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
+
+
+async def getCtfSoon(ctx):
+    # grab from RSS feed
+    num = 6 # default number to retrieve
+    # retrieve and print
+    rssFeed = upcomingCTFs()
+    # prevent retrieving too many
+    if num > len(rssFeed['entries']):
+        num = len(rssFeed['entries'])
+    # send all the ones retrieved
+    for entry in rssFeed['entries'][slice(0,num)]:
+        title, reply = buildReplyRSS(entry)
+        await ctx.send(embed = discord.Embed(title = title, description = reply, color = 0xFFFFFF))
