@@ -10,10 +10,9 @@ import discord
 from discord.ext import commands
 # environmental variables for security :D
 from dotenv import load_dotenv
-import os # reading .env file
+import os # reading local files
 
 # utility libraries
-import yt_dlp
 import random # for pseudo rng for the game. Not used for dice rolls
 from datetime import datetime
 
@@ -50,8 +49,8 @@ discordToken = os.getenv("DISCORD_TOKEN")
 openai.api_key = os.getenv("OPENAI_TOKEN")
 
 # folder for cached media (for audio downloads)
-media = "media/ "
-media = media[:-1]
+mediaDir = "media/ "
+mediaDir = mediaDir[:-1]
 
 # define the furry reply (to owo and derivatives)
 furryReply = "Hewwo uwu?"
@@ -59,18 +58,6 @@ furryReply = "Hewwo uwu?"
 # ics filename
 icsFileName = "events.ics"
 
-
-
-# yt-dlp options
-ytdlOps = {
-    'format': 'mp3/bestaudio/best',
-    'outtmpl': 'media/%(id)s.%(ext)s',
-    # ℹ️ See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
-    'postprocessors': [{  # Extract audio using ffmpeg
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-    }]
-}
 
 
 
@@ -242,46 +229,16 @@ async def on_voice_state_update(member, before, after):
     if len(voice_state.channel.members) == 1:
         # Exiting if the bot is the only one connected to this voice channel
         await voice_state.disconnect()
+    return
 
 
 # play some audio
 @client.command(aliases=['p'])
 async def play(ctx, *, link):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " played some music. " + str(link))
-    
-    # get the right voice connection
-    voiceChannel = audioTools.getVoiceChannel(ctx, client)
-    print("Gonna try to play some music")
-    print(client.voice_clients)
+    await audioTools.playMusic(ctx, link, mediaDir, client)
+    return
 
-    # check for invalid input to prevent data injection
-    if audioTools.checkInvalidLink(link):
-        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please input a valid YouTube ID.\nEg: `=play dQw4w9WgXcQ`", color = 0x880000))
-        return
-    
-    # if the bot isn't connected to a voice channel, then voiceChannel = -1
-    if voiceChannel == -1:
-        await ctx.send(embed = discord.Embed(title = "Error!", description = "Please connect the bot to a voice channel. `=join`", color = 0x880000))
-        return
-
-    # if the file does exist, play!
-    if os.path.isfile(media + link + ".mp3"):
-        try:
-            voiceChannel.play(discord.FFmpegPCMAudio(media + link + ".mp3"))
-        except:
-            await ctx.send(embed = discord.Embed(title = "Error!", description = "Please join a voice channel to play music.", color = 0x880000))
-        return
-    
-    # show typing while we download the file so the user knows something is happenning.
-    async with ctx.typing():
-        # the file doesn't exist! Need to download it.
-        with yt_dlp.YoutubeDL(ytdlOps) as ydl:
-            error_code = ydl.download([link])
-
-    # play the audio
-    voiceChannel.play(discord.FFmpegPCMAudio(media + link + ".mp3"))
-    await ctx.message.add_reaction("➡")
-    
 
 
 # audio controls
