@@ -1,5 +1,6 @@
 from datetime import datetime
 import discord
+import os
 
 # ics header
 icsHeader = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:https://github.com/Cubie87/Pandora\n"
@@ -9,7 +10,6 @@ icsHeader = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:https://github.com/Cubie87/Pan
 def castDiscordTimeToZulu(timeObject):
     timeString = str(timeObject)
     time = datetime.strptime(timeString, "%Y-%m-%d %H:%M:%S%z")
-    print(time)
     return time.strftime('%Y%m%dT%H%M%SZ')
 
 
@@ -47,5 +47,7 @@ async def getEvents(ctx, icsFileName):
     # load file and send
     file = discord.File(icsFileName)
     await ctx.send(file=file)
+    # delete file
+    os.remove(icsFileName)
 
 

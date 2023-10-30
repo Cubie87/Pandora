@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 import os # reading local files
 
 # utility libraries
-import random # for pseudo rng for the game. Not used for dice rolls
+import random # for "the game"
 
 # custom libraries
 from variables import botVars
@@ -137,7 +137,7 @@ async def on_message(message):
     # furry react
     if message.content.startswith(":3"):
         # Black Hanekawa Cat Gif
-        await message.channel.send(file = discord.File(media + "teehee0.gif"))
+        await message.channel.send(file = discord.File("teehee0.gif"))
         return
 
     # continue processing bot commands
@@ -177,8 +177,6 @@ async def events(ctx):
     async with ctx.typing():
         # make event and send file
         await ical.getEvents(ctx, icsFileName)
-    # delete file
-    os.remove(icsFileName)
 
 
 
