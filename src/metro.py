@@ -26,8 +26,8 @@ async def metroTweets(ctx, apiURL):
     for tweet in userTweets['entries']:
         # get post timestamp as a unix epoch
         unixpost = int(datetime.strptime(str(tweet['published']), '%a, %d %b %Y %H:%M:%S %Z').timestamp())
-        # break if not sent in the past 72 hours
-        if unixpost < rightNow - 259200:
+        # break if not sent in the past 24 hours
+        if unixpost < rightNow - 86400:
             break
         # otherwise retrieve text
         tweetText = tweet['title_detail']['value']
