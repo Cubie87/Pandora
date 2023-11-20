@@ -22,7 +22,8 @@ def makeVevent(event, icsFile):
     icsFile.write("DTEND:" + castDiscordTimeToZulu(event.end_time) + "\n")
     icsFile.write("SUMMARY:" + event.name + "\n")
     icsFile.write("LOCATION:" + event.location + "\n")
-    icsFile.write("DESCRIPTION:" + event.description + "\n")
+    descString = clean_text = event.description.replace("\n", "\\n")
+    icsFile.write("DESCRIPTION:" + descString + "\n")
     icsFile.write("END:VEVENT\n")
 
 
