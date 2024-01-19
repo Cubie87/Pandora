@@ -72,15 +72,14 @@ sudo apt install screen
 
 #### Python Dependencies
 
-If you don't have python3 and pip already, install them
+If you don't have python3 and pip already, install them, along with ffmpeg. Ffmpeg is used for audio playback
 ```bash
 sudo apt install python-is-python3 python3-pip ffmpeg
 ```
 
 Install python dependencies
 ```bash
-pip install discord.py python-dotenv numpy yt-dlp openai feedparser
-pip install -U discord.py[voice]
+pip install -r requirements.txt
 ```
 
 Then run `run.sh`
@@ -96,4 +95,4 @@ You may used other programs such as tmux for the same functionality, remember to
 
 Alternatively, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora. Please note that the docker image is not thoroughly tested and may contain bugs.
 
-Generate a discord bot invite URL on the applications page of the developer portal and invite to a server. 
+Generate a discord bot management invite URL on the applications page of the developer portal and invite to a server. 

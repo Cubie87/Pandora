@@ -1,0 +1,7 @@
+discord.py
+python-dotenv
+numpy
+yt-dlp
+openai
+feedparser
+# discord.py[voice]
