@@ -9,7 +9,7 @@ icsHeader = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:https://github.com/Cubie87/Pan
 # zulu time is what's used by ics files
 def castDiscordTimeToZulu(timeObject):
     timeString = str(timeObject)
-    time = datetime.strptime(timeString, "%Y-%m-%d %H:%M:%S%z")
+    time = datetime.strptime(str(timeString[0:19] + timeString[26:32]), "%Y-%m-%d %H:%M:%S%z")
     return time.strftime('%Y%m%dT%H%M%SZ')
 
 
