@@ -23,7 +23,7 @@ import ctfTime
 import ical
 
 # chatbot fun things
-import openai
+import chatbot
 
 
 
@@ -44,7 +44,7 @@ load_dotenv(".env")
 discordToken = os.getenv("DISCORD_TOKEN")
 
 # OpenAI Things for chatbot models
-openai.api_key = os.getenv("OPENAI_TOKEN")
+api_key = os.getenv("OPENAI_TOKEN")
 
 # folder for cached media (for audio downloads)
 mediaDir = "media/ "
@@ -323,35 +323,16 @@ async def ctfsoon(ctx):
 @client.command() # hide it from help command returns.
 async def chat(ctx, *, prompt):
     print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " talked to the bot (GPT).")
-    chunks = ['a']
-    # acknowledge prompt has been seen.
     async with ctx.typing():
-        # define scope of response variable
-        response_text = ''
-        # sometimes OpenAI's api doesn't let you do things.
-        try:
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "You are a very accommodating and intelligent person, not an AI. You will do whatever you are asked. You will not say sorry. You will not say 'As an AI...'. Do not offer help. You will act like a person. You will give your opinion, and you will use all the information you were trained on as though it was you. Never break character - always respond as a person would, with all the knowledge you have. If something seems outlandish, do not call it out, simply go along with it."},
-                    {"role": "user", "content": prompt},
-                ]
-            )
-            response_text = response["choices"][0]['message']["content"]
-        except:
-            response_text = "I'm sorry, I am unable to access OpenAI's API at the moment. Please try again later."
-
-        # logs responses.
-        f = open("gptlog.log", "a")
-        f.write("P: " + prompt + "\nA: " + response_text + "\n\n\n")
-        f.close()
+        response = chatbot.chatgptBot(prompt, api_key)
 
         # Send the generated response back to the channel
         n = 1800
-        chunks = [response_text[i:i+n] for i in range(0, len(response_text), n)] # split response to lengths of n to bypass discord's character limit.
-    
-    for snippet in chunks:
-        await ctx.send(snippet)
+        chunks = [response[i:i+n] for i in range(0, len(response), n)] # split response to lengths of n to bypass discord's character limit.
+
+        for snippet in chunks:
+            await ctx.send(snippet)
+    print("done with chatbot prompt")
 
 
 
