@@ -44,6 +44,7 @@ To run your own instance of Pandora, you will need some extra files in the proje
 `src/.env` with
 ```
 DISCORD_TOKEN=[Discord token here]
+OPENAI_TOKEN=[OpenAI token here]
 ```
 
 `src/variables.py` with
@@ -59,40 +60,12 @@ class botVars:
 
 The prefix should be a single character used as the prefix for bot commands.
 
-Remove the `rsp` command, along with the `metro` command.
+Remove the `rsp` command (or figure it out and customise it!)
 
-Then, install dependences 
+#### Docker Compose
 
-### Program Dependencies
+To run Pandora, ensure that you have docker and docker compose installed on your machine. Simply run `docker compose up -d` to start Pandora.
 
-Install `screen`
-```bash
-sudo apt install screen
-```
-
-#### Python Dependencies
-
-If you don't have python3 and pip already, install them, along with ffmpeg. Ffmpeg is used for audio playback
-```bash
-sudo apt install python-is-python3 python3-pip ffmpeg
-```
-
-Install python dependencies
-```bash
-pip install -r requirements.txt
-```
-
-Then run `run.sh`
-```bash
-chmod +x run.sh
-./run.sh
-```
-
-Remember that Pandora will run in a detached screen. To re-attach, `$ screen -r pandora`. To detach, `Ctrl+A, Ctrl+D`.
-
-You may used other programs such as tmux for the same functionality, remember to edit `src/run.sh` in that case.
-
-
-Alternatively, run `docker build -t pandora .` to build the docker image, and `docker run pandora` to run pandora. Please note that the docker image is not thoroughly tested and may contain bugs.
+#### First Server
 
 Generate a discord bot management invite URL on the applications page of the developer portal and invite to a server. 

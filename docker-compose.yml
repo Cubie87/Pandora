@@ -1,0 +1,8 @@
+services:
+  pandora:
+    build:
+      context: .   # Path to the directory containing your Dockerfile
+      dockerfile: Dockerfile        # Name of your Dockerfile
+      tags: 
+        - "pandora"
+    restart: unless-stopped

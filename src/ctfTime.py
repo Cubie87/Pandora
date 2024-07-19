@@ -48,7 +48,7 @@ def buildReplyRSS(rssFeed):
 
 # check if it's a 4 digit numerical code
 def isCtfCodeValid(code):
-    if not re.search("\d{1,4}", code):
+    if not re.search("\\d{1,4}", code):
         return False
     return True
 
