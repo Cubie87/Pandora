@@ -37,17 +37,30 @@ Other misc commands not covered here are "easter eggs" and can be found by looki
 
 
 ## Setup
-To run your own instance of Pandora, you will need some extra files in the project's `src/` directory.
+To run your own instance of Pandora:
+
+```sh
+git clone https://github.com/Cubie87/Pandora
+cd Pandora
+```
+
+you will need some extra files in the project's `src/` directory.
 
 ### Files
-
-`src/.env` with
+#### Environment Variables (API Keys)
+```sh
+vim src/.env
+```
+and add the following into the .env file:
 ```
 DISCORD_TOKEN=[Discord token here]
 OPENAI_TOKEN=[OpenAI token here]
 ```
-
-`src/variables.py` with
+#### Bot Variables
+```sh
+vim src/variables.py
+```
+with the following file content:
 ```py
 class botVars:
     prefix = [prefix]
@@ -62,10 +75,10 @@ The prefix should be a single character used as the prefix for bot commands.
 
 Remove the `rsp` command (or figure it out and customise it!)
 
-#### Docker Compose
+### Docker Compose
 
 To run Pandora, ensure that you have docker and docker compose installed on your machine. Simply run `docker compose up -d` to start Pandora.
 
-#### First Server
+### First Server
 
 Generate a discord bot management invite URL on the applications page of the developer portal and invite to a server. 
