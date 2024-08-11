@@ -9,6 +9,7 @@ def chatgptBot(prompt, api_key):
         "Authorization": f"Bearer " + api_key
     }
     payload = {
+        "max_tokens": 1024,
         "model": "gpt-3.5-turbo",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7
