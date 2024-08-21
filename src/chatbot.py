@@ -10,7 +10,7 @@ def chatgptBot(prompt, api_key):
     }
     payload = {
         "max_tokens": 1024,
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-3.5-turbo-16k",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7
     }

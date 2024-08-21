@@ -21,6 +21,8 @@ import diceRoller
 import audioTools
 import ctfTime
 import ical
+from metro import metroTweets
+
 
 # chatbot fun things
 import chatbot
@@ -359,6 +361,32 @@ async def rsp(ctx):
     if ctx.guild.id == botVars.rspServer:
         reply = botVars.rspPrompt
         await ctx.send(reply)
+
+
+
+
+
+
+
+
+
+
+#
+#
+## Metro Tweets 
+#
+#
+
+
+# send a brief summary of metro status
+@client.command()
+async def metro(ctx):
+    print(ctx.message.author.name + "#" + ctx.message.author.discriminator + " retrieved metro information.")
+    async with ctx.typing():
+        await metroTweets(ctx, botVars.twtapiurl)
+    # announce processing is finished (or that there is no items of note)
+    await ctx.send(embed = discord.Embed(title = "Done", color = 0xFFFFFF))
+
 
 
 
